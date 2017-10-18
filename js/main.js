@@ -46,23 +46,21 @@ class HelloWorld extends Stage {
     });
   }
 
-  update(objs) {
-    console.log(objs);
-    if (objs)
-      objs.forEach(function(obj) {
+  update() {
+    if (this.objects)
+      this.objects.forEach(function(obj) {
         obj.update();
       });
   }
 
-  render(objs) {
-    console.log(objs);
-    if (objs)
-      objs.forEach(function(obj) {
-        obj.render();
+  render() {
+    if (this.objects)
+      this.objects.forEach(function(obj) {
+        obj.update();
       });
   }
 }
 
 let world = new HelloWorld();
 world.addObject(new Player());
-world.start(1, 1);
+world.start(100, 100);

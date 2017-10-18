@@ -1,5 +1,7 @@
 let a = new Actor();
-a.bindToElement(document.getElementById("player"));
+let e = document.createElement('div');
+e.classList.add('player');
+a.bindToElement(e);
 a.styleElement({
   "height": '100px',
   "width": '100px',
@@ -14,6 +16,14 @@ a.init = function() {
   a.vy = 1;
   a.x = 100;
   a.y = 100;
+
+  document.addEventListener("keydown", function(event) {
+    if (event.which == 65) a.vx = -2.5;
+    else if (event.which == 68) a.vx = 2.5;
+
+    if (event.which == 87) a.vy = -2.5;
+    if (event.which == 83) a.vy = 2.5;
+  });
 }
 
 a.update = function() {
@@ -30,19 +40,18 @@ a.update = function() {
   } else if (a.getLocation().y < 0) {
     a.vy *= -1
   }
+
+
+
 }
 
 let stage = new Stage();
 stage.bindToElement(document.getElementById("stage"));
-
-stage.addObject(a);
-
 stage.update = function() {
-  //  if (stage.objects)
-  stage.objects.forEach(function(obj) {
-    obj.update();
-  });
-  console.log(stage.refreshUpdate.currentRPS);
+  if (stage.objects)
+    stage.objects.forEach(function(obj) {
+      obj.update();
+    });
 }
 
 stage.render = function() {
@@ -52,4 +61,6 @@ stage.render = function() {
     })
 }
 
+a.init();
+stage.addObject(a);
 stage.start(120, 60);
