@@ -26,7 +26,7 @@ class Refresh {
     this.currentRPS = millisElapsed / this.rpsInterval * this.rps;
     if (millisElapsed > this.rpsInterval) {
       this.timer.mark();
-      this.funct;
+      this.funct();
     }
   }
 }

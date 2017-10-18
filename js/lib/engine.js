@@ -72,10 +72,11 @@ class Stage extends WebObject {
 
   //Starts the loops
   start(updateTicksPerSecond, renderTicksPerSecond) {
+    console.log("starting")
     this.refreshUpdate = new Refresh(this.update, updateTicksPerSecond);
     this.refreshRender = new Refresh(this.render, renderTicksPerSecond);
-    this.refreshUpdate.start();
-    this.refreshRender.start();
+    this.refreshUpdate.start(this.objects);
+    this.refreshRender.start(this.objects);
   }
 
   init() {}
@@ -90,5 +91,7 @@ class Stage extends WebObject {
       this.objects.push(obj);
     else
       this.objects = new Array(obj);
+
+    console.log(this.objects);
   }
 }

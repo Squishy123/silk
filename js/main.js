@@ -1,8 +1,4 @@
 class Player extends Actor {
-  constructor() {
-    super();
-  }
-
   init() {
     let e = document.createElement('div');
     e.classList.add('player');
@@ -40,31 +36,33 @@ class Player extends Actor {
 }
 
 class HelloWorld extends Stage {
-  constructor() {
-    super();
-  }
 
   init() {
     this.bindToElement(document.getElementById("stage"));
-    this.addObject(new Player());
-    this.start(this.update, 100);
+    this.styleElement({
+      "height": '500px',
+      "width": '500px',
+      "backgroundColor": 'black',
+    });
   }
 
-  update() {
-    if (this.objects)
-      this.objects.forEach(function(obj) {
+  update(objs) {
+    console.log(objs);
+    if (objs)
+      objs.forEach(function(obj) {
         obj.update();
       });
   }
 
-  render() {
-    if (this.objects)
-      this.objects.forEach(function(obj) {
-        obj.update();
+  render(objs) {
+    console.log(objs);
+    if (objs)
+      objs.forEach(function(obj) {
+        obj.render();
       });
   }
 }
 
 let world = new HelloWorld();
-world.update();
-world.update();
+world.addObject(new Player());
+world.start(1, 1);
