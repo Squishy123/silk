@@ -1,5 +1,5 @@
 let a = new Actor();
-a.bindToElement(document.getElementById("actor"));
+a.bindToElement(document.getElementById("player"));
 a.styleElement({
   "height": '100px',
   "width": '100px',
@@ -15,8 +15,6 @@ a.init = function() {
   a.x = 100;
   a.y = 100;
 }
-
-a.init();
 
 a.update = function() {
   a.setLocation(a.x + a.vx, a.y + a.vy);
@@ -51,7 +49,7 @@ stage.render = function() {
   if (stage.objects)
     stage.objects.forEach(function(obj) {
       obj.update();
-    });
+    })
 }
 
 stage.start(120, 60);
