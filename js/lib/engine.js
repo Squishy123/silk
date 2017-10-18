@@ -70,6 +70,22 @@ class Stage extends WebObject {
     this.init();
   }
 
+  init() {}
+
+  update() {}
+
+  render() {}
+
+  addObject(obj) {
+    if (this.objects)
+      this.objects.push(obj);
+    else
+      this.objects = new Array(obj);
+
+    this.element.appendChild(obj.element);
+    console.log(this.objects);
+  }
+
   //Starts the loops
   start(updateTicksPerSecond, renderTicksPerSecond) {
     this.refreshUpdate = new Refresh(this.update, updateTicksPerSecond);
@@ -78,17 +94,4 @@ class Stage extends WebObject {
     this.refreshRender.start();
   }
 
-  init() {}
-
-  update() {}
-
-  render() {}
-
-  addObject(obj) {
-    this.element.appendChild(obj.element);
-    if (this.objects)
-      this.objects.push(obj);
-    else
-      this.objects = new Array(obj);
-  }
 }

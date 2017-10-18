@@ -4,7 +4,9 @@
 class Refresh {
   //Function that is to be run at RPS(refreshes per seconds)
   constructor(funct, rps) {
-    this.funct = funct;
+    this.run = function() {
+      funct()
+    };
     this.rps = rps;
     this.start(this.rps);
   }
@@ -16,6 +18,8 @@ class Refresh {
     this.loop();
   }
 
+  run() {}
+
   loop() {
     if (this.stop) return;
     //Request a frame refresh
@@ -26,7 +30,8 @@ class Refresh {
     this.currentRPS = millisElapsed / this.rpsInterval * this.rps;
     if (millisElapsed > this.rpsInterval) {
       this.timer.mark();
-      this.funct;
+      //this["funct"]();
+      this.run();
     }
   }
 }
