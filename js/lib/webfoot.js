@@ -25,13 +25,20 @@ class WebObject {
  **/
 class Actor extends WebObject {
   //Calls the init() function before anything else
-  constructor() {
+  constructor(init, update, render) {
     super();
+    this.init = this.init.bind(init);
+    this.update = this.update.bind(update);
+    this.render = this.render.bind(render);
+
     this.init();
   }
 
   //Called before actor is added to the stage
-  init() {}
+  init() {
+    //Sets default position to (0, 0)
+    //setLocation(0, 0);
+  }
 
   //Called every update tick
   update() {}
@@ -65,33 +72,31 @@ class Actor extends WebObject {
  * and updating of multiple Actors
  **/
 class Stage extends WebObject {
-  constructor() {
+  constructor(init, update, render) {
     super();
-    this.addObject = new Actor();
-    this.init();
+    this.init = this.init.bind(init);
+    this.update = this.update.bind(update);
+    this.render = this.render.bind(render);
   }
 
   //Starts the loops
   start(updateTicksPerSecond, renderTicksPerSecond) {
+    console.log(this.update)
     this.refreshUpdate = new Refresh(this.update, updateTicksPerSecond);
     this.refreshRender = new Refresh(this.render, renderTicksPerSecond);
     this.refreshUpdate.start();
     this.refreshRender.start();
   }
 
-  init() {}
-
-  update() {
-    console.log(this.objectsInStage)
+  init() {
+    this.objects = [];
   }
+
+  update() {}
 
   render() {}
 
-  get objectsInStage() {
-    return this.objects;
-  }
-
-  set addObject(obj) {
+  addObject(obj) {
     //this.element.appendChild(obj.element);
     if (this.objects)
       this.objects.push(obj);

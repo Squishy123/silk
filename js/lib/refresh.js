@@ -13,7 +13,12 @@ class Refresh {
     this.stop = false;
     this.rpsInterval = 1000 / this.rps;
     this.timer = new Timer();
+    this.run = this.run.bind(this.funct);
     this.loop();
+  }
+
+  run() {
+    //console.log("running");
   }
 
   loop() {
@@ -26,7 +31,7 @@ class Refresh {
     this.currentRPS = millisElapsed / this.rpsInterval * this.rps;
     if (millisElapsed > this.rpsInterval) {
       this.timer.mark();
-      this.funct();
+      this.run();
     }
   }
 }
