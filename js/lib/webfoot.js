@@ -1,54 +1,38 @@
-/**
- * An Entity is an object that exists in the app
- * It has an init() function that is called on instantiation
- * It has an update() function that is called every render cycle
- **/
-class WebObject {
+//Custom WebFoot Errors
+class WebFootError extends Error {}
 
-  bindToElement(element) {
-    this.element = element;
+class WebObject {
+  constructor(element) {
+    this.bindElement(element);
   }
 
-  styleElement(element, styles) {
-    Object.assign(element.style, styles);
+  bindElement(element) {
+    this.element = element;
   }
 
   styleElement(styles) {
     Object.assign(this.element.style, styles);
   }
-
 }
 
-/**
- * An Actor is an object that exists in a Stage
- * it has an HTML element that can be manipulated through functions
- **/
 class Actor extends WebObject {
-  //Calls the init() function before anything else
-  constructor(init, update, render) {
-    super();
-    this.init = this.init.bind(init);
-    this.update = this.update.bind(update);
-    this.render = this.render.bind(render);
-
-    this.init();
+  constructor(element) {
+    super(element);
   }
 
-  //Called before actor is added to the stage
   init() {
-    //Sets default position to (0, 0)
-    //setLocation(0, 0);
+    //Add all the default styles
+    this.styleElement({
+      "position": 'absolute',
+      "top": '0px',
+      "left": '0px'
+    });
   }
 
-  //Called every update tick
-  update() {}
+  create() {
 
-  //Called every render tick
-  render() {}
+  }
 
-  /**
-   * Set the position of the actor
-   **/
   setLocation(x, y) {
     //sets the variables
     this.x = x;
@@ -67,42 +51,82 @@ class Actor extends WebObject {
   }
 }
 
-/**
- * A Stage is an object that manages the rendering
- * and updating of multiple Actors
- **/
-class Stage extends WebObject {
-  constructor(init, update, render) {
-    super();
-    this.init = this.init.bind(init);
-    this.update = this.update.bind(update);
-    this.render = this.render.bind(render);
+class Player extends Actor {
+  constructor(element) {
+    super(element);
   }
 
-  //Starts the loops
+  init(obj) {
+    obj.vx = 1;
+    obj.vy = 1;
+    obj.x = 0;
+    obj.y = 0;
+
+    obj.colors = ["red", "orange", "yellow", "green", "blue", "indigo", "violet"];
+    obj.colorCount = 0;
+
+    obj.styleElement({
+      "position": 'absolute',
+      "top": '0px',
+      "left": '0px',
+      "height": '100px',
+      "width": '100px',
+      "background-color": 'red',
+      "transition": "background-color 1s"
+    });
+
+    document.addEventListener("keydown", function(event) {
+      if (event.which == 65) obj.vx = -2.5;
+      else if (event.which == 68) obj.vx = 2.5;
+
+      if (event.which == 87) obj.vy = -2.5;
+      if (event.which == 83) obj.vy = 2.5;
+    });
+  }
+
+  render(obj) {
+    if (obj.colorCount === obj.colors.length) obj.colorCount = 0;
+    obj.styleElement({
+      "background-color": obj.colors[obj.colorCount]
+    });
+    obj.colorCount++;
+  }
+
+  update(obj) {
+    obj.setLocation(obj.x + obj.vx, obj.y + obj.vy);
+
+    if (obj.getLocation().x > window.innerWidth - 100) {
+      obj.vx *= -1;
+    } else if (obj.getLocation().x < 0) {
+      obj.vx *= -1
+    };
+
+    if (obj.getLocation().y > window.innerHeight - 100) {
+      obj.vy *= -1;
+    } else if (obj.getLocation().y < 0) {
+      obj.vy *= -1
+    }
+
+  }
+}
+
+class Bundler {
+  constructor(actor) {
+    this.actor = actor;
+  }
+
   start(updateTicksPerSecond, renderTicksPerSecond) {
-    console.log(this.update)
-    this.refreshUpdate = new Refresh(this.update, updateTicksPerSecond);
-    this.refreshRender = new Refresh(this.render, renderTicksPerSecond);
+    this.actor.init(this.actor);
+    let update = () => {
+      this.actor.update(this.actor)
+    };
+    this.refreshUpdate = new Refresh(update, updateTicksPerSecond);
+    let render = () => {
+      this.actor.render(this.actor)
+    };
+    this.refreshRender = new Refresh(render, renderTicksPerSecond);
+
     this.refreshUpdate.start();
     this.refreshRender.start();
-  }
-
-  init() {
-    this.objects = [];
-  }
-
-  update() {}
-
-  render() {}
-
-  addObject(obj) {
-    //this.element.appendChild(obj.element);
-    if (this.objects)
-      this.objects.push(obj);
-    else
-      this.objects = [obj];
-
-    console.log(this.objects);
   }
 }

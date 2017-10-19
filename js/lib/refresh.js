@@ -6,23 +6,24 @@ class Refresh {
   constructor(funct, rps) {
     this.funct = funct;
     this.rps = rps;
-    this.start(this.rps);
   }
 
   start() {
-    this.stop = false;
+    this.running = false;
     this.rpsInterval = 1000 / this.rps;
     this.timer = new Timer();
-    this.run = this.run.bind(this.funct);
-    this.loop();
+    if (this.rps > 0)
+      this.loop();
+    else
+      console.log(new WebFootError("Your RPS is at 0 so I'm not even gonna start"));
   }
 
-  run() {
-    //console.log("running");
+  stop() {
+    this.running = true;
   }
 
   loop() {
-    if (this.stop) return;
+    if (this.running) return;
     //Request a frame refresh
     window.requestAnimationFrame(this.loop.bind(this));
 
@@ -31,7 +32,14 @@ class Refresh {
     this.currentRPS = millisElapsed / this.rpsInterval * this.rps;
     if (millisElapsed > this.rpsInterval) {
       this.timer.mark();
-      this.run();
+
+      //If the function is undefined output an error and running running
+      if (!this.funct) {
+        this.running = true;
+        console.log(new WebFootError("The function you are trying to refresh is undefined"));
+      } else {
+        this.funct();
+      }
     }
   }
 }
