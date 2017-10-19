@@ -1,3 +1,92 @@
+/**
+ * Counts the amount of seconds between a starting event
+ * and an ending event
+ *
+ * @author Christian Wang
+ * @version Sept 2016
+ */
+class Timer {
+  /**
+   * Default constructor for timer object
+   * Starts the timer
+   */
+  constructor() {
+    this.mark();
+  }
+
+  /**
+   * Starts the timer and sets the starttime value to current time
+   */
+  mark() {
+    this.startTime = Date.now();
+  }
+
+  /**
+   * Returns the amount of seconds that passed
+   * Since the starting event
+   */
+  secondsElapsed() {
+    return (Date.now() - this.startTime) / 1000;
+  }
+
+  /**
+   * Returns the amount of millisecondss that passed
+   * Since the starting event
+   */
+  millisecondsElapsed() {
+    return Date.now() - this.startTime;
+  }
+}
+
+/**
+ * Controls the rate at which a function is looped
+ *
+ * @author Christian Wang
+ * @version Oct 2017
+ **/
+class Refresh {
+  //Function that is to be run at RPS(refreshes per seconds)
+  constructor(funct, rps) {
+    this.funct = funct;
+    this.rps = rps;
+  }
+
+  start() {
+    this.running = false;
+    this.rpsInterval = 1000 / this.rps;
+    this.timer = new Timer();
+    if (this.rps > 0)
+      this.loop();
+    else
+      console.log(new WebFootError("Your RPS is at 0 so I'm not even gonna start"));
+  }
+
+  stop() {
+    this.running = true;
+  }
+
+  loop() {
+    if (this.running) return;
+    //Request a frame refresh
+    window.requestAnimationFrame(this.loop.bind(this));
+
+    //If enough time has passed call the function
+    let millisElapsed = this.timer.millisecondsElapsed();
+    this.currentRPS = millisElapsed / this.rpsInterval * this.rps;
+    if (millisElapsed > this.rpsInterval) {
+      this.timer.mark();
+
+      //If the function is undefined output an error and running running
+      if (!this.funct) {
+        this.running = true;
+        console.log(new WebFootError("The function you are trying to refresh is undefined"));
+      } else {
+        this.funct();
+      }
+    }
+  }
+}
+
 //Custom WebFoot Errors
 class WebFootError extends Error {}
 
@@ -16,22 +105,20 @@ class WebObject {
 }
 
 class Actor extends WebObject {
-  constructor(element) {
-    super(element);
+  constructor() {
+    super(document.createElement('div'));
   }
 
   init() {
     //Add all the default styles
     this.styleElement({
-      "position": 'absolute',
+      "position": 'relative',
       "top": '0px',
       "left": '0px'
     });
   }
 
-  create() {
 
-  }
 
   setLocation(x, y) {
     //sets the variables
@@ -51,62 +138,18 @@ class Actor extends WebObject {
   }
 }
 
-class Player extends Actor {
+class Stage extends WebObject {
   constructor(element) {
     super(element);
+    this.actorsInStage = [];
   }
 
-  init(obj) {
-    obj.vx = 1;
-    obj.vy = 1;
-    obj.x = 0;
-    obj.y = 0;
-
-    obj.colors = ["red", "orange", "yellow", "green", "blue", "indigo", "violet"];
-    obj.colorCount = 0;
-
-    obj.styleElement({
-      "position": 'absolute',
-      "top": '0px',
-      "left": '0px',
-      "height": '100px',
-      "width": '100px',
-      "background-color": 'red',
-      "transition": "background-color 1s"
+  addObject(bundle) {
+    this.actorsInStage.push({
+      "actor": bundle.actor,
+      "bundler": bundle
     });
-
-    document.addEventListener("keydown", function(event) {
-      if (event.which == 65) obj.vx = -2.5;
-      else if (event.which == 68) obj.vx = 2.5;
-
-      if (event.which == 87) obj.vy = -2.5;
-      if (event.which == 83) obj.vy = 2.5;
-    });
-  }
-
-  render(obj) {
-    if (obj.colorCount === obj.colors.length) obj.colorCount = 0;
-    obj.styleElement({
-      "background-color": obj.colors[obj.colorCount]
-    });
-    obj.colorCount++;
-  }
-
-  update(obj) {
-    obj.setLocation(obj.x + obj.vx, obj.y + obj.vy);
-
-    if (obj.getLocation().x > window.innerWidth - 100) {
-      obj.vx *= -1;
-    } else if (obj.getLocation().x < 0) {
-      obj.vx *= -1
-    };
-
-    if (obj.getLocation().y > window.innerHeight - 100) {
-      obj.vy *= -1;
-    } else if (obj.getLocation().y < 0) {
-      obj.vy *= -1
-    }
-
+    this.element.appendChild(bundle.actor.element);
   }
 }
 
@@ -117,16 +160,21 @@ class Bundler {
 
   start(updateTicksPerSecond, renderTicksPerSecond) {
     this.actor.init(this.actor);
-    let update = () => {
-      this.actor.update(this.actor)
-    };
-    this.refreshUpdate = new Refresh(update, updateTicksPerSecond);
-    let render = () => {
-      this.actor.render(this.actor)
-    };
-    this.refreshRender = new Refresh(render, renderTicksPerSecond);
+    if (this.actor.update) {
+      let update = () => {
+        this.actor.update(this.actor)
+      };
+      this.refreshUpdate = new Refresh(update, updateTicksPerSecond);
+    } else console.log(new WebFootError("Bundled actor has no update function"));
 
-    this.refreshUpdate.start();
-    this.refreshRender.start();
+    if (this.actor.render) {
+      let render = () => {
+        this.actor.render(this.actor)
+      };
+      this.refreshRender = new Refresh(render, renderTicksPerSecond);
+
+      this.refreshUpdate.start();
+      this.refreshRender.start();
+    } else console.log(new WebFootError("Bundled actor has no render function"));
   }
 }
