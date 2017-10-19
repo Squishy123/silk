@@ -5,11 +5,11 @@ s.styleElement({
   "height": "500px",
   "background-color": "#000000"
 });
+
 let p = new Player();
 let b = new Bundler(p);
 s.addObject(b);
-b.start(120, 0.5);
-
+b.start(600, 0.5);
 
 let squares = [new Bundler(new Tile()), new Bundler(new Tile()), new Bundler(new Tile())]
 squares.forEach(function(e) {
