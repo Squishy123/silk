@@ -4,6 +4,7 @@ class Player extends Actor {
   }
 
   init(obj) {
+    super.init();
     obj.vx = 0;
     obj.vy = 0;
     obj.x = 0;
@@ -15,9 +16,6 @@ class Player extends Actor {
     obj.colorCount = 0;
 
     obj.styleElement({
-      "position": 'absolute',
-      "top": '0px',
-      "left": '0px',
       "height": '50px',
       "width": '50px',
       "background-color": 'red',
@@ -45,7 +43,7 @@ class Player extends Actor {
 
   update(obj) {
 
-    if (obj.getLocation().x > obj.element.parentElement.clientWidth - obj.element.style["width"].replace("px", "")) {
+    if (obj.getLocation().x > obj.element.parentElement.clientWidth - obj.getDimensions().width) {
       console.log("hit")
       obj.vx *= -1;
     } else if (obj.getLocation().x < 0) {
@@ -54,7 +52,7 @@ class Player extends Actor {
     };
 
 
-    if (obj.getLocation().y > obj.element.parentElement.clientHeight - obj.element.style["height"].replace("px", "")) {
+    if (obj.getLocation().y > obj.element.parentElement.clientHeight - obj.getDimensions().height - 10) {
       obj.grounded = true;
       obj.vy *= -0.85;
     } else if (obj.getLocation().y < 0) {
@@ -67,6 +65,9 @@ class Player extends Actor {
       obj.vy += 1;
     }
 
-    obj.setLocation(obj.x + obj.vx, obj.y + obj.vy);
+    obj.setLocation({
+      x: (obj.x + obj.vx),
+      y: (obj.y + obj.vy)
+    });
   }
 }

@@ -51,6 +51,7 @@ class Refresh {
     this.rps = rps;
   }
 
+  //Starts the refresh cycle
   start() {
     this.running = false;
     this.rpsInterval = 1000 / this.rps;
@@ -61,10 +62,12 @@ class Refresh {
       console.log(new WebFootError("Your RPS is at 0 so I'm not even gonna start"));
   }
 
+  //Stops the refresh cycle
   stop() {
     this.running = true;
   }
 
+  //Function that is refreshed every cycle
   loop() {
     if (this.running) return;
     //Request a frame refresh
@@ -107,27 +110,46 @@ class WebObject {
 class Actor extends WebObject {
   constructor() {
     super(document.createElement('div'));
+    this.stage = null;
+  }
+
+  start(updateTicksPerSecond, renderTicksPerSecond) {
+    this.init(this);
+    if (this.update) {
+      let update = () => {
+        this.update(this)
+      };
+      this.refreshUpdate = new Refresh(update, updateTicksPerSecond);
+    } else console.log(new WebFootError("Actor has no update function"));
+
+    if (this.render) {
+      let render = () => {
+        this.render(this)
+      };
+      this.refreshRender = new Refresh(render, renderTicksPerSecond);
+
+      this.refreshUpdate.start();
+      this.refreshRender.start();
+    } else console.log(new WebFootError("Actor has no render function"));
   }
 
   init() {
     //Add all the default styles
     this.styleElement({
-      "position": 'relative',
+      "position": 'absolute',
       "top": '0px',
       "left": '0px'
     });
   }
 
-
-
-  setLocation(x, y) {
+  setLocation(location) {
     //sets the variables
-    this.x = x;
-    this.y = y;
+    this.x = location.x;
+    this.y = location.y;
 
     //sets the element style properties
-    this.element.style["top"] = y + "px";
-    this.element.style["left"] = x + "px";
+    this.element.style["top"] = location.y + "px";
+    this.element.style["left"] = location.x + "px";
   }
 
   getLocation() {
@@ -135,6 +157,21 @@ class Actor extends WebObject {
       x: this.x,
       y: this.y
     };
+  }
+
+  getDimensions() {
+    return {
+      width: this.element.style["width"].replace("px", ""),
+      height: this.element.style["height"].replace("px", "")
+    };
+  }
+
+  setDimensions(dimensions) {
+    if (dimensions.width)
+      this.element.style["width"] = dimensions.width;
+
+    if (dimensions.height)
+      this.element.style["height"] = dimensions.height;
   }
 }
 
@@ -144,37 +181,12 @@ class Stage extends WebObject {
     this.actorsInStage = [];
   }
 
-  addObject(bundle) {
+  addObject(actor) {
+    actor.stage = this;
     this.actorsInStage.push({
-      "actor": bundle.actor,
-      "bundler": bundle
+      "actor": actor
     });
-    this.element.appendChild(bundle.actor.element);
-  }
-}
-
-class Bundler {
-  constructor(actor) {
-    this.actor = actor;
+    this.element.appendChild(actor.element);
   }
 
-  start(updateTicksPerSecond, renderTicksPerSecond) {
-    this.actor.init(this.actor);
-    if (this.actor.update) {
-      let update = () => {
-        this.actor.update(this.actor)
-      };
-      this.refreshUpdate = new Refresh(update, updateTicksPerSecond);
-    } else console.log(new WebFootError("Bundled actor has no update function"));
-
-    if (this.actor.render) {
-      let render = () => {
-        this.actor.render(this.actor)
-      };
-      this.refreshRender = new Refresh(render, renderTicksPerSecond);
-
-      this.refreshUpdate.start();
-      this.refreshRender.start();
-    } else console.log(new WebFootError("Bundled actor has no render function"));
-  }
 }

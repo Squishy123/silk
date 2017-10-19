@@ -6,14 +6,11 @@ s.styleElement({
   "background-color": "#000000"
 });
 
-let p = new Player();
-let b = new Bundler(p);
-s.addObject(b);
-b.start(600, 0.5);
+let p1 = new Paddle();
+s.addObject(p1);
+p1.start(100,100);
 
-let squares = [new Bundler(new Tile()), new Bundler(new Tile()), new Bundler(new Tile())]
-squares.forEach(function(e) {
-  s.addObject(e);
-  e.start(100, 100);
-})
-console.log(s.actorsInStage);
+let p2 = new Paddle();
+s.addObject(p2);
+p2.start(100,100);
+p2.setLocation({x: p2.element.parentElement.clientWidth-p2.getDimensions().width, y: p2.y});
