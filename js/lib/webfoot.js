@@ -97,9 +97,21 @@ class Bounds {
     this.width = width;
     this.height = height;
   }
+
+  updateBounds(boundProperties) {
+    if (boundProperties.x)
+      this.x = boundProperties.x;
+    if (boundProperties.y)
+      this.y = boundProperties.y;
+    if (boundProperties.width)
+      this.width = boundProperties.width;
+    if (boundProperties.height)
+      this.height = boundProperties.height;
+  }
 }
 
 //Quadtree Implementation
+//TODO Allow quadtree to have a reference to an actor
 class QuadTree {
   constructor(level, bounds) {
     //how many objects a node can hold before it splits
@@ -212,7 +224,7 @@ class QuadTree {
    **/
   retrieve(returnObjects, bounds) {
     let index = this.getIndex(bounds);
-    if(index != -1 && this.nodes[0] != null) {
+    if (index != -1 && this.nodes[0] != null) {
       this.nodes[index].retrieve(returnObjects, bounds);
     }
 
@@ -242,6 +254,7 @@ class Actor extends WebObject {
   constructor() {
     super(document.createElement('div'));
     this.stage = null;
+    this.bounds = new Bounds(0, 0, 0, 0);
   }
 
   start(updateTicksPerSecond, renderTicksPerSecond) {
@@ -282,13 +295,23 @@ class Actor extends WebObject {
   }
 
   setLocation(location) {
+    let boundProperties = {};
     //sets the variables
-    this.x = location.x;
-    this.y = location.y;
+    if (location.x) {
+      this.x = location.x;
+      boundProperties.x = location.x;
+    }
 
+    if (location.y) {
+      this.y = location.y;
+      boundProperties.y = location.y;
+    }
     //sets the element style properties
     this.element.style["top"] = location.y + "px";
     this.element.style["left"] = location.x + "px";
+
+    //updateBounds
+    this.bounds.updateBounds(boundProperties);
   }
 
   getLocation() {
@@ -302,15 +325,23 @@ class Actor extends WebObject {
     return {
       width: this.element.style["width"].replace("px", ""),
       height: this.element.style["height"].replace("px", "")
-    };
+    }
   }
 
   setDimensions(dimensions) {
-    if (dimensions.width)
-      this.element.style["width"] = dimensions.width;
+    let boundProperties = {};
 
-    if (dimensions.height)
-      this.element.style["height"] = dimensions.height;
+    if (dimensions.width) {
+      this.element.style["width"] = dimensions.width + "px";
+      boundProperties.width = dimensions.width;
+    }
+
+    if (dimensions.height) {
+      this.element.style["height"] = dimensions.height + "px";
+      boundProperties.height = dimensions.height;
+    }
+    //updateBounds
+    this.bounds.updateBounds(boundProperties);
   }
 }
 
@@ -322,12 +353,36 @@ class Stage extends WebObject {
     this.defaultRenderTicksPerSecond = 60;
   }
 
+  start() {
+    this.quad = new QuadTree(0, new Bounds(0, 0, this.getDimensions().width, this.getDimensions().height));
+  }
+
+  updateQuadTree() {
+    let quad = this.quad;
+    if (this.objectsInStage)
+      this.objectsInStage.forEach(function(obj) {
+        if (quad) {
+          quad.clear();
+          quad.insert(obj.actor.bounds);
+        }
+      });
+
+    //Testing
+    //console.log("X: " + this.quad.objects[0].x + " Y: " + this.quad.objects[0].y);
+  }
+
   addObject(actor) {
     actor.stage = this;
     this.objectsInStage.push({
       "actor": actor
     });
     this.element.appendChild(actor.element);
+
+
+    //updateQuadTree
+    this.updateQuadTree();
+
+    //Start the actor's cycles
     actor.start(this.defaultUpdateTicksPerSecond, this.defaultRenderTicksPerSecond);
   }
 
@@ -342,4 +397,29 @@ class Stage extends WebObject {
   getObjects() {
     return this.objectsInStage;
   }
+
+  getDimensions() {
+    return {
+      width: this.element.style["width"].replace("px", ""),
+      height: this.element.style["height"].replace("px", "")
+    }
+  }
+
+  setDimensions(dimensions) {
+    let boundProperties = {};
+
+    if (dimensions.width) {
+      this.element.style["width"] = dimensions.width + "px";
+      boundProperties.width = dimensions.width;
+    }
+
+    if (dimensions.height) {
+      this.element.style["height"] = dimensions.height + "px";
+      boundProperties.height = dimensions.height;
+    }
+    //updateBounds
+    this.bounds.updateBounds(boundProperties);
+  }
+
+  //getCollidingObjects
 }

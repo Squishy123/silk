@@ -6,7 +6,7 @@ s.styleElement({
   "background-color": "#000000"
 });
 
+s.start();
+
 let p1 = new Player();
 s.addObject(p1);
-
-console.log(s.getObjects());

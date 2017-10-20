@@ -16,11 +16,15 @@ class Player extends Actor {
     obj.colorCount = 0;
 
     obj.styleElement({
-      "height": '50px',
-      "width": '50px',
       "background-color": 'red',
       "transition": "background-color 1s"
     });
+
+    //Set the size
+    obj.setDimensions({
+      "height": '50',
+      "width": '50'
+    })
 
     document.addEventListener("keydown", function(event) {
       if (event.which == 65) obj.vx += -2.5;
@@ -39,10 +43,10 @@ class Player extends Actor {
       "background-color": obj.colors[obj.colorCount]
     });
     obj.colorCount++;
+    obj.stage.updateQuadTree();
   }
 
   update(obj) {
-
     if (obj.getLocation().x > obj.element.parentElement.clientWidth - obj.getDimensions().width) {
       console.log("hit")
       obj.vx *= -1;
