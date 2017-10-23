@@ -3,53 +3,53 @@ class Player extends Actor {
     super();
   }
 
-  init(obj) {
+  init() {
     super.init();
-    obj.vx = 5;
-    obj.vy = 5;
-    obj.x = 200;
-    obj.y = 200;
+    this.vx = 5;
+    this.vy = 5;
+    this.x = 200;
+    this.y = 200;
 
-    obj.styleElement({
+    this.styleElement({
       "background-color": 'red',
     });
 
-    obj.setDimensions({
+    this.setDimensions({
       height: 50,
       width: 50
     });
 
-    obj.keys = [];
-
+    this.keys = [];
+    let keys = this.keys;
     document.addEventListener("keydown", function(e) {
-      obj.keys[e.which] = true;
+      keys[e.which] = true;
     }, false);
 
     document.addEventListener("keyup", function(e) {
-      obj.keys[e.which] = false;
+      keys[e.which] = false;
     }, false);
 
   }
 
-  render(obj) {
-    if (obj.stage.checkCollisions(obj).length > 0) obj.styleElement({
+  render() {
+    if (this.stage.checkCollisions(this).length > 0) this.styleElement({
       "background-color": 'green'
     });
-    else obj.styleElement({
+    else this.styleElement({
       "background-color": "red"
     });
   }
 
 
-  update(obj) {
-    if (obj.keys[87]) obj.y -= obj.vy;
-    if (obj.keys[83]) obj.y += obj.vy;
-    if (obj.keys[65]) obj.x -= obj.vx;
-    if (obj.keys[68]) obj.x += obj.vx;
+  update() {
+    if (this.keys[87]) this.y -= this.vy;
+    if (this.keys[83]) this.y += this.vy;
+    if (this.keys[65]) this.x -= this.vx;
+    if (this.keys[68]) this.x += this.vx;
 
-    obj.setLocation({
-      x: obj.x,
-      y: obj.y
+    this.setLocation({
+      x: this.x,
+      y: this.y
     });
   }
 }

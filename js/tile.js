@@ -3,8 +3,9 @@ class Tile extends Actor {
     super();
   }
 
-  init(obj) {
+  init() {
     super.init();
+    let obj = this;
     obj.styleElement({
       "position": 'absolute',
       "background-color": 'yellow'

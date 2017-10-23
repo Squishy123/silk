@@ -12,17 +12,17 @@ class Actor extends WebObject {
   }
 
   start(updateTicksPerSecond, renderTicksPerSecond) {
-    this.init(this);
+    this.init();
     if (this.update) {
       let update = () => {
-        this.update(this)
+        this.update()
       };
       this.refreshUpdate = new Refresh(update, updateTicksPerSecond);
     } else console.log(new WebFootError("Actor has no update function"));
 
     if (this.render) {
       let render = () => {
-        this.render(this)
+        this.render()
       };
       this.refreshRender = new Refresh(render, renderTicksPerSecond);
 
@@ -37,11 +37,13 @@ class Actor extends WebObject {
     });
   }
 
-  update(obj) {
+  update() {
+    let obj = this;
     if (obj.stage == null) obj.refreshUpdate.stop();
   }
 
-  render(obj) {
+  render() {
+    let obj = this;
     if (obj.stage == null) obj.refreshRender.stop();
   }
 
