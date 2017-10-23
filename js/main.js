@@ -11,5 +11,10 @@ s.setDimensions({
 
 s.start();
 
+let tiles = [new Tile(), new Tile(), new Tile()];
+tiles.forEach(function(t) {
+  s.addObject(t);
+});
+
 let p1 = new Player();
 s.addObject(p1);

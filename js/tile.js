@@ -10,12 +10,12 @@ class Tile extends Actor {
       "background-color": 'yellow'
     });
     obj.setDimensions({
-      width: 100,
-      height: 100
+      width: 50,
+      height: 50
     });
     obj.setLocation({
-      x: 100,
-      y: 100
+      x: Math.floor(Math.random() * 450),
+      y: Math.floor(Math.random() * 450)
     });
 
   }

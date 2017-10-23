@@ -32,15 +32,26 @@ class Stage extends WebObject {
 
   }
 
-  updateQuadTree(obj) {
-    let quad = obj.quad;
+  checkCollisions(object1) {
+    let quad = this.quad;
+    let returnObjs = [];
+    let cC = (obj1, obj2) => {return this.checkCollision(obj1, obj2)};
+    this.objectsInStage.forEach(function(e) {
+      quad.retrieve(returnObjs, object1).forEach(function(obj) {
+        if (obj)
+          if (obj != object1)
+            if (cC(obj, object1))
+              returnObjs.push(obj);
+      });
+    });
+    return returnObjs;
   }
 
   //USES SAT
   checkCollision(object1, object2) {
-    if (object1.x < object2.x + object2.width  && object1.x + object1.width  > object2.x &&
-    		object1.y < object2.y + object2.height && object1.y + object1.height > object2.y) {
-    return true;
+    if (object1.x < object2.x + object2.width && object1.x + object1.width > object2.x &&
+      object1.y < object2.y + object2.height && object1.y + object1.height > object2.y) {
+      return true;
     }
     return false;
   }
@@ -53,7 +64,6 @@ class Stage extends WebObject {
     this.element.appendChild(actor.element);
     //Add this actor to the quadtree
     this.quad.insert(actor, actor.getBounds());
-
 
     actor.start(this.defaultUpdateTicksPerSecond, this.defaultRenderTicksPerSecond);
   }
