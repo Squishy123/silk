@@ -6,50 +6,43 @@ class Player extends Actor {
   init(obj) {
     super.init();
     obj.vx = 0;
-    obj.vy = -5;
-    obj.x = 0;
-    obj.y = 0;
-
-    obj.colors = ["red", "orange", "yellow", "green", "blue", "indigo", "violet"];
-    obj.colorCount = 0;
+    obj.vy = 0;
+    obj.x = 200;
+    obj.y = 200;
 
     obj.styleElement({
       "background-color": 'red',
-      "transition": "background-color 1s"
     });
 
-    //Set the size
     obj.setDimensions({
-      "height": '50',
-      "width": '50'
-    })
+      height: 50,
+      width: 50
+    });
+
+    obj.listener = document.addEventListener("keydown", function(e) {
+      if (e.which == 87) obj.y += -10;
+      if (e.which == 83) obj.y += 10;
+      if (e.which == 68) obj.x += 10;
+      if (e.which == 65) obj.x += -10;
+    });
+
+    obj.tile = new Tile();
+    obj.stage.addObject(obj.tile);
   }
 
   render(obj) {
-    if (obj.colorCount === obj.colors.length) obj.colorCount = 0;
-    obj.styleElement({
-      "background-color": obj.colors[obj.colorCount]
+    if (obj.stage.checkCollision(obj, obj.tile)) obj.styleElement({
+      "background-color": 'green'
+    })
+    else obj.styleElement({
+      "background-color": "red"
     });
-    obj.colorCount++;
-    //obj.stage.updateQuadTree();
   }
 
   update(obj) {
-    console.log(obj.checkGrounded(obj));
-
-    if (obj.checkGrounded(obj)) {
-      obj.setLocation({
-        y: 10
-      })
-    } else obj.vy = 5;
-
     obj.setLocation({
-      y: (obj.y + obj.vy)
+      x: obj.x + obj.vx,
+      y: obj.y + obj.vy
     });
-  }
-
-  checkGrounded(obj) {
-    if (obj.y >= (obj.stage.height - obj.height)) return true;
-    return false;
   }
 }

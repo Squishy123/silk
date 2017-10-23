@@ -1,7 +1,10 @@
 //Quadtree Implementation
 //TODO Allow quadtree to have a reference to an actor
 class QuadTree {
-  constructor(level, bounds) {
+  constructor(webObject, level, bounds) {
+    //Reference to webObject
+    this.webObject = webObject;
+
     //how many objects a node can hold before it splits
     this.MAX_OBJECTS = 10;
     //the deepest level subnode
@@ -43,10 +46,30 @@ class QuadTree {
     let y = this.bounds.y;
 
     //Subdivide the area into 4 subregions according to cartesian plane quadrant order
-    this.nodes[0] = new QuadTree(this.level + 1, new Bounds(x + subWidth, y + subHeight, subWidth, subHeight));
-    this.nodes[1] = new QuadTree(this.level + 1, new Bounds(x, y + subHeight, subWidth, subHeight));
-    this.nodes[2] = new QuadTree(this.level + 1, new Bounds(x, y, subWidth, subHeight));
-    this.nodes[3] = new QuadTree(this.level + 1, new Bounds(x + subWidth, y, subWidth, subHeight));
+    this.nodes[0] = new QuadTree(this.level + 1, {
+      x: x + subWidth,
+      y: y + subHeight,
+      width: subWidth,
+      height: subHeight
+    });
+    this.nodes[1] = new QuadTree(this.level + 1, {
+      x: x,
+      y: y + subHeight,
+      width: subWidth,
+      height: subHeight
+    });
+    this.nodes[2] = new QuadTree(this.level + 1, {
+      x: x,
+      y: y,
+      width: subWidth,
+      height: subHeight
+    });
+    this.nodes[3] = new QuadTree(this.level + 1, {
+      x: x + subWidth,
+      y: y,
+      width: subWidth,
+      height: subHeight
+    });
   }
 
   /**
@@ -81,16 +104,16 @@ class QuadTree {
    * If the node exceeds the capacity, it will split
    * and add all objects to their corresponding nodes
    **/
-  insert(bounds) {
+  insert(actor, bounds) {
     if (this.nodes[0] != null) {
       let index = getIndex(bounds);
       if (index != -1) {
-        this.nodes[index].insert(bounds);
+        this.nodes[index].insert(this, bounds);
         return;
       }
     }
 
-    this.objects.push(bounds);
+    this.objects.push(actor, bounds);
 
     if (this.objects.length > this.MAX_OBJECTS && this.level < this.MAX_LEVELS) {
       if (this.nodes[0] == null) {

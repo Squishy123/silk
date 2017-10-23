@@ -1,17 +1,23 @@
 class Tile extends Actor {
+  constructor() {
+    super();
+  }
+
   init(obj) {
+    super.init();
     obj.styleElement({
       "position": 'absolute',
-      "top": '0px',
-      "left": '0px',
-      "height": '100px',
-      "width": '100px',
       "background-color": 'yellow'
     });
+    obj.setDimensions({
+      width: 100,
+      height: 100
+    });
+    obj.setLocation({
+      x: 100,
+      y: 100
+    });
 
-    obj.x = Math.floor(Math.random() * 5) * 100;
-    obj.y = Math.floor(Math.random() * 5) * 100;
-    obj.setLocation(obj.x, obj.y);
   }
 
 }

@@ -39,4 +39,13 @@ class WebObject {
       this.height = dimensions.height;
     }
   }
+
+  getBounds() {
+    return {
+      x: this.x,
+      y: this.y,
+      width: this.width,
+      height: this.height
+    };
+  }
 }
