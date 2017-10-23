@@ -11,6 +11,12 @@ class Actor extends WebObject {
     this.stage = null;
   }
 
+  bindElement(element) {
+    this.element = element;
+    if (this.stage)
+      this.stage.element.appendChild(element);
+  }
+
   start(updateTicksPerSecond, renderTicksPerSecond) {
     this.init();
     if (this.update) {

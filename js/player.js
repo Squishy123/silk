@@ -4,6 +4,9 @@ class Player extends Actor {
   }
 
   init() {
+    let e = document.createElement("h1");
+    e.innerHTML = "Clicked?";
+    this.bindElement(e);
     super.init();
     this.vx = 5;
     this.vy = 5;
@@ -14,10 +17,12 @@ class Player extends Actor {
       "background-color": 'red',
     });
 
+
     this.setDimensions({
       height: 50,
-      width: 50
+      width: 125
     });
+
 
     this.keys = [];
     let keys = this.keys;
@@ -51,5 +56,11 @@ class Player extends Actor {
       x: this.x,
       y: this.y
     });
+
+    /** IF YOU WANT TO COLLIDE
+    if (this.stage.checkCollisions(this)[0] instanceof Tile) {
+      this.setLocation(before);
+    }
+    **/
   }
 }
