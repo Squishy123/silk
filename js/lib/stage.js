@@ -10,13 +10,16 @@ class Stage extends WebObject {
     this.objectsInStage = [];
     this.defaultUpdateTicksPerSecond = 60;
     this.defaultRenderTicksPerSecond = 60;
-
-    this.bounds = new Bounds(0, 0, 0, 0);
   }
 
 
   start() {
-    this.quad = new QuadTree(0, new Bounds(0, 0, this.getDimensions().width, this.getDimensions().height));
+    this.quad = new QuadTree(0, {
+      x: 0,
+      y: 0,
+      width: this.width,
+      height: this.height
+    });
   }
 
   updateQuadTree() {
@@ -39,12 +42,6 @@ class Stage extends WebObject {
       "actor": actor
     });
     this.element.appendChild(actor.element);
-
-
-    //updateQuadTree
-    //this.updateQuadTree();
-
-    //Start the actor's cycles
     actor.start(this.defaultUpdateTicksPerSecond, this.defaultRenderTicksPerSecond);
   }
 
@@ -59,37 +56,4 @@ class Stage extends WebObject {
   getObjects() {
     return this.objectsInStage;
   }
-
-  getDimensions() {
-    return {
-      width: this.element.style["width"].replace("px", ""),
-      height: this.element.style["height"].replace("px", "")
-    }
-  }
-
-  setDimensions(dimensions) {
-    let boundProperties = {};
-
-    if (dimensions.width) {
-      this.element.style["width"] = dimensions.width + "px";
-      boundProperties.width = dimensions.width;
-    }
-
-    if (dimensions.height) {
-      this.element.style["height"] = dimensions.height + "px";
-      boundProperties.height = dimensions.height;
-    }
-    //updateBounds
-    this.bounds.updateBounds(boundProperties);
-  }
-
-  updateBounds(boundProperties) {
-    this.updateBounds(boundProperties);
-  }
-
-  getBounds() {
-    return this.bounds;
-  }
-
-  //getCollidingObjects
 }

@@ -44,12 +44,12 @@ class Player extends Actor {
     } else obj.vy = 5;
 
     obj.setLocation({
-      y: (obj.getBounds().y + obj.vy)
+      y: (obj.y + obj.vy)
     });
   }
 
   checkGrounded(obj) {
-    if (obj.getBounds().y >= (obj.stage.getBounds().height - obj.getBounds().height)) return true;
+    if (obj.y >= (obj.stage.height - obj.height)) return true;
     return false;
   }
 }
