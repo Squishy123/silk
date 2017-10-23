@@ -5,8 +5,8 @@ class Player extends Actor {
 
   init(obj) {
     super.init();
-    obj.vx = 0;
-    obj.vy = 0;
+    obj.vx = 5;
+    obj.vy = 5;
     obj.x = 200;
     obj.y = 200;
 
@@ -19,12 +19,15 @@ class Player extends Actor {
       width: 50
     });
 
-    obj.listener = document.addEventListener("keydown", function(e) {
-      if (e.which == 87) obj.y += -10;
-      if (e.which == 83) obj.y += 10;
-      if (e.which == 68) obj.x += 10;
-      if (e.which == 65) obj.x += -10;
-    });
+    obj.keys = [];
+
+    document.addEventListener("keydown", function(e) {
+      obj.keys[e.which] = true;
+    }, false);
+
+    document.addEventListener("keyup", function(e) {
+      obj.keys[e.which] = false;
+    }, false);
 
     obj.tile = new Tile();
     obj.stage.addObject(obj.tile);
@@ -40,9 +43,14 @@ class Player extends Actor {
   }
 
   update(obj) {
+    if(obj.keys[87]) obj.y -= obj.vy;
+    if(obj.keys[83]) obj.y += obj.vy;
+    if(obj.keys[65]) obj.x -= obj.vx;
+    if(obj.keys[68]) obj.x += obj.vx;
+
     obj.setLocation({
-      x: obj.x + obj.vx,
-      y: obj.y + obj.vy
+      x: obj.x,
+      y: obj.y
     });
   }
 }
