@@ -4,6 +4,7 @@ require("js/lib/quadtree.js");
 require("js/lib/webobject.js");
 require("js/lib/actor.js");
 require("js/lib/stage.js");
+require("js/lib/inputhandler.js");
 require("js/tile.js");
 require("js/player.js");
 require("js/main.js");

@@ -4,9 +4,6 @@ class Player extends Actor {
   }
 
   init() {
-    let e = document.createElement("h1");
-    e.innerHTML = "Clicked?";
-    this.bindElement(e);
     super.init();
     this.vx = 5;
     this.vy = 5;
@@ -20,19 +17,15 @@ class Player extends Actor {
 
     this.setDimensions({
       height: 50,
-      width: 125
+      width: 50
     });
 
 
-    this.keys = [];
-    let keys = this.keys;
-    document.addEventListener("keydown", function(e) {
-      keys[e.which] = true;
-    }, false);
-
-    document.addEventListener("keyup", function(e) {
-      keys[e.which] = false;
-    }, false);
+    this.inputHandler = new InputHandler();
+    this.inputHandler.targetEvents({
+      keydown: true,
+      keyup: true
+    });
 
   }
 
@@ -47,10 +40,10 @@ class Player extends Actor {
 
 
   update() {
-    if (this.keys[87]) this.y -= this.vy;
-    if (this.keys[83]) this.y += this.vy;
-    if (this.keys[65]) this.x -= this.vx;
-    if (this.keys[68]) this.x += this.vx;
+    if (this.inputHandler.keys[87]) this.y -= this.vy;
+    if (this.inputHandler.keys[83]) this.y += this.vy;
+    if (this.inputHandler.keys[65]) this.x -= this.vx;
+    if (this.inputHandler.keys[68]) this.x += this.vx;
 
     this.setLocation({
       x: this.x,

@@ -4,12 +4,26 @@
 <head>
   <title>Webfoot</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" </head>
+  <style>
+    #stage {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin-right: -50%;
+      transform: translate(-50%, -50%)
+    }
 
-  <body>
-    <h1>Press W to teleport</h1>
+    }
+  </style>
+</head>
+
+<body>
+  <h1>WASD to control</h1>
+  <div class="container">
     <div id="stage">
     </div>
-    <script type="text/javascript" src="js/loader.js"></script>
-  </body>
+  </div>
+  <script type="text/javascript" src="js/loader.js"></script>
+</body>
 
 </html>
