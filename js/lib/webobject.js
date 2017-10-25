@@ -4,6 +4,7 @@ class WebFootError extends Error {}
 class WebObject {
   constructor(element) {
     this.bindElement(element);
+    element.classList.add(this.constructor.name);
     //Default these values are all zero
     this.x = 0, this.y = 0, this.width = 0, this.height = 0;
   }
