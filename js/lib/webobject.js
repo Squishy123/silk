@@ -5,8 +5,7 @@ class WebObject {
   constructor(element) {
     this.bindElement(element);
     element.classList.add(this.constructor.name);
-    //Default these values are all zero
-    this.x = 0, this.y = 0, this.width = 0, this.height = 0;
+    //Get
   }
 
   bindElement(element) {
@@ -17,27 +16,22 @@ class WebObject {
     Object.assign(this.element.style, styles);
   }
 
-  setLocation(location) {
-    if (location.x) {
-      this.element.style["left"] = location.x + "px";
-      this.x = location.x;
+  setBounds(bounds) {
+    if (bounds.x) {
+      this.element.style["left"] = bounds.x + "px";
+      this.x = bounds.x;
     }
-
-    if (location.y) {
-      this.element.style["top"] = location.y + "px";
-      this.y = location.y;
+    if (bounds.y) {
+      this.element.style["top"] = bounds.y + "px";
+      this.y = bounds.y;
     }
-  }
-
-  setDimensions(dimensions) {
-    if (dimensions.width) {
-      this.element.style["width"] = dimensions.width + "px";
-      this.width = dimensions.width;
+    if (bounds.width) {
+      this.element.style["width"] = bounds.width + "px";
+      this.width = bounds.width;
     }
-
-    if (dimensions.height) {
-      this.element.style["height"] = dimensions.height + "px";
-      this.height = dimensions.height;
+    if (bounds.height) {
+      this.element.style["height"] = bounds.height + "px";
+      this.height = bounds.height;
     }
   }
 

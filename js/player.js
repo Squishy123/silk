@@ -15,14 +15,16 @@ class Player extends Actor {
     });
 
 
-    this.setDimensions({
+    this.setBounds({
       height: 50,
-      width: 50
+      width: 50,
+      x: this.x,
+      y: this.y
     });
 
 
     this.inputHandler = new InputHandler();
-    this.inputHandler.targetEvents({
+    this.inputHandler.targetEvents(document, {
       keydown: true,
       keyup: true
     });
@@ -45,7 +47,7 @@ class Player extends Actor {
     if (this.inputHandler.keys[65]) this.x -= this.vx;
     if (this.inputHandler.keys[68]) this.x += this.vx;
 
-    this.setLocation({
+    this.setBounds({
       x: this.x,
       y: this.y
     });

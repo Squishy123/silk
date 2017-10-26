@@ -4,7 +4,7 @@ s.styleElement({
 });
 
 
-s.setDimensions({
+s.setBounds({
   width: 500,
   height: 500
 })
