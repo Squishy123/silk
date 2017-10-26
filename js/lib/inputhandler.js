@@ -1,18 +1,38 @@
 class InputHandler {
   constructor() {
-    this.keys = [];
+    this.input = {
+      keys: [],
+      click: false
+    };
   }
 
-  targetEvents(events) {
+  targetEvents(element, events) {
     let obj = this;
     if (events.keydown)
-      document.addEventListener("keydown", function(e) {
-        obj.keys[e.which] = true;
+      element.addEventListener("keydown", function(e) {
+        obj.input.keys[e.which] = true;
       });
     if (events.keyup)
-      document.addEventListener("keyup", function(e) {
-        obj.keys[e.which] = false;
+      element.addEventListener("keyup", function(e) {
+        obj.input.keys[e.which] = false;
       });
+    if (events.click) {
+      element.addEventListener("click", function(e) {
+        obj.input.click = true;
+      });
+    }
   }
 
+  get keys() {
+    return this.input.keys;
+  }
+
+  get click() {
+    if (this.input.click) {
+      //reset
+      this.input.click = false;
+      return true;
+    }
+    return this.input.click;
+  }
 }

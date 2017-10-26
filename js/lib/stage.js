@@ -14,10 +14,11 @@ class Stage extends WebObject {
 
 
   start() {
+    console.log(this.element.getBoundingClientRect())
     this.quad = new QuadTree(this, 0, {
       x: 0,
       y: 0,
-      width: this.width,
+      width: this.element.getBoundingClientRect().width,
       height: this.height
     });
 
