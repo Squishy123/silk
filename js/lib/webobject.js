@@ -5,11 +5,14 @@ class WebObject {
   constructor(element) {
     this.bindElement(element);
     element.classList.add(this.constructor.name);
-    //Get
   }
 
   bindElement(element) {
     this.element = element;
+    //update initial bounds
+    let bounds = element.getBoundingClientRect();
+    this.setBounds(bounds);
+    console.log(this.getBounds());
   }
 
   styleElement(styles) {
