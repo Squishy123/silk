@@ -9,12 +9,18 @@ class Actor extends WebObject {
   constructor() {
     super(document.createElement('div'));
     this.stage = null;
+    this.objectsInStage = [];
+    this.defaultUpdateTicksPerSecond = 60;
+    this.defaultRenderTicksPerSecond = 60;
   }
 
   bindElement(element) {
+    let temp = this.element;
     this.element = element;
-    if (this.stage)
+    if (this.stage) {
+      this.stage.element.removeChild(temp);
       this.stage.element.appendChild(element);
+    }
   }
 
   start(updateTicksPerSecond, renderTicksPerSecond) {
@@ -53,4 +59,28 @@ class Actor extends WebObject {
     if (obj.stage == null) obj.refreshRender.stop();
   }
 
+
+  addObject(actor) {
+    actor.stage = this;
+    this.objectsInStage.push({
+      "actor": actor
+    });
+    this.element.appendChild(actor.element);
+    //Add this actor to the quadtree
+    //  this.quad.insert(actor, actor.getBounds());
+
+    actor.start(this.defaultUpdateTicksPerSecond, this.defaultRenderTicksPerSecond);
+  }
+
+  removeObject(actor) {
+    actor.stage = null;
+    this.objectsInStage = this.objectsInStage.filter(function(element) {
+      return element != actor;
+    });
+    this.element.removeChild(actor.element);
+  }
+
+  getObjects() {
+    return this.objectsInStage;
+  }
 }
