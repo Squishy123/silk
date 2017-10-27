@@ -9,15 +9,18 @@ s.setBounds({
   height: "75vh",
   x: "50%",
   y: "50%"
-})
-
-
-s.start();
-
-let tiles = [new Tile(), new Tile(), new Tile()];
-tiles.forEach(function(t) {
-  s.addObject(t);
 });
-
+let tiles = [new Tile(), new Tile(), new Tile()];
 let p1 = new Player();
-s.addObject(p1);
+
+function start() {
+  s.start();
+  tiles.forEach(function(t) {
+    s.addObject(t);
+  });
+  s.addObject(p1);
+}
+
+function stop() {
+  s.stop();
+}

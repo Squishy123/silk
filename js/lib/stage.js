@@ -29,8 +29,12 @@ class Stage extends WebObject {
       this.refreshUpdate = new Refresh(update, 60);
       this.refreshUpdate.start();
     } else console.log(new WebFootError("Actor has no update function"));
+  }
 
-
+  stop() {
+    this.objectsInStage.forEach(function(e) {
+      e.actor.stop();
+    });
   }
 
   checkCollisions(object1) {

@@ -42,7 +42,6 @@ class Player extends Actor {
 
 
   update() {
-    console.log(this.getBounds())
     if (this.inputHandler.keys[87]) this.y -= this.vy;
     if (this.inputHandler.keys[83]) this.y += this.vy;
     if (this.inputHandler.keys[65]) this.x -= this.vx;

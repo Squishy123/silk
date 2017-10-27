@@ -43,6 +43,13 @@ class Actor extends WebObject {
     } else console.log(new WebFootError("Actor has no render function"));
   }
 
+  stop() {
+    if (this.refreshUpdate)
+      this.refreshUpdate.stop();
+    if (this.refreshRender)
+      this.refreshRender.stop();
+  }
+
   init() {
     this.styleElement({
       "position": 'absolute'
