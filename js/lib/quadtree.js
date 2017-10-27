@@ -114,7 +114,7 @@ class QuadTree {
    **/
   insert(actor, bounds) {
     if (this.nodes[0] != null) {
-      let index = getIndex(bounds);
+      let index = this.getIndex(bounds);
       if (index != -1) {
         this.nodes[index].insert(this, bounds);
         return;

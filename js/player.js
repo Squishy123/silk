@@ -7,7 +7,7 @@ class Player extends Actor {
     super.init();
     this.vx = 5;
     this.vy = 5;
-    this.x = 200;
+    this.x = 200
     this.y = 200;
 
     this.styleElement({

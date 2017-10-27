@@ -6,6 +6,8 @@ require("js/lib/actor.js");
 require("js/lib/stage.js");
 require("js/lib/inputhandler.js");
 require("js/tile.js");
+require("js/bird.js");
+require("js/sling.js");
 require("js/player.js");
 require("js/main.js");
 
