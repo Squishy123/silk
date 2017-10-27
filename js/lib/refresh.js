@@ -1,4 +1,3 @@
-//require("js/lib/timer.js");
 /**
  * Controls the rate at which a function is looped
  *

@@ -1,46 +1,54 @@
-/**require("js/lib/refresh.js");
-require("js/lib/quadtree.js");
-require("js/lib/webobject.js");
-require("js/lib/bounds.js");
-require("js/lib/actor.js");
-**/
+/**
+ * An DOM object that houses actors and manages
+ * their runtime states
+ *
+ * @author Christian Wang
+ * @version 1.0
+ **/
 class Stage extends WebObject {
+  /**
+   * Creates a new Stage with a given element
+   **/
   constructor(element) {
     super(element);
     this.objectsInStage = [];
+    //How many times the actors render and update will loop per second
     this.defaultUpdateTicksPerSecond = 60;
     this.defaultRenderTicksPerSecond = 60;
+    this.start();
   }
 
-
+  /**
+   * Creates a new QuadTree and sets it to the current bounds
+   **/
   start() {
-    console.log(this.element.getBoundingClientRect())
     this.quad = new QuadTree(this, 0, {
       x: 0,
       y: 0,
       width: this.element.getBoundingClientRect().width,
       height: this.height
     });
-
-    if (this.updateQuadTree) {
-      let update = () => {
-        this.updateQuadTree(this);
-      };
-      this.refreshUpdate = new Refresh(update, 60);
-      this.refreshUpdate.start();
-    } else console.log(new WebFootError("Actor has no update function"));
   }
 
+  /**
+   * Stops the actors in this stage from looping
+   **/
   stop() {
     this.objectsInStage.forEach(function(e) {
       e.actor.stop();
     });
   }
 
+  /**
+   * Return a list of objects colliding with the given objects
+   * Uses SAT algorithm
+   **/
   checkCollisions(object1) {
     let quad = this.quad;
     let returnObjs = [];
-    let cC = (obj1, obj2) => {return this.checkCollision(obj1, obj2)};
+    let cC = (obj1, obj2) => {
+      return this.checkCollision(obj1, obj2)
+    };
     this.objectsInStage.forEach(function(e) {
       quad.retrieve(returnObjs, object1).forEach(function(obj) {
         if (obj)
@@ -52,7 +60,9 @@ class Stage extends WebObject {
     return returnObjs;
   }
 
-  //USES SAT
+  /**
+   * Returns true if 2 objects are colliding according to SAT algorithm
+   **/
   checkCollision(object1, object2) {
     if (object1.x < object2.x + object2.width && object1.x + object1.width > object2.x &&
       object1.y < object2.y + object2.height && object1.y + object1.height > object2.y) {
@@ -61,6 +71,9 @@ class Stage extends WebObject {
     return false;
   }
 
+  /**
+   * Adds an actor to this stage
+   **/
   addObject(actor) {
     actor.stage = this;
     this.objectsInStage.push({
@@ -73,6 +86,9 @@ class Stage extends WebObject {
     actor.start(this.defaultUpdateTicksPerSecond, this.defaultRenderTicksPerSecond);
   }
 
+  /**
+   * Removes an object from this stage
+   **/
   removeObject(actor) {
     actor.stage = null;
     this.objectsInStage = this.objectsInStage.filter(function(element) {
@@ -81,6 +97,9 @@ class Stage extends WebObject {
     this.element.removeChild(actor.element);
   }
 
+  /**
+   * Retunrs all the child objects in this stage
+   **/
   getObjects() {
     return this.objectsInStage;
   }

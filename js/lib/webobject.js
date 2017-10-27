@@ -1,25 +1,39 @@
-//Custom WebFoot Errors
-class WebFootError extends Error {}
-
+/**
+ * A basic DOM object
+ *
+ * @author Christian Wang
+ * @version 1.0
+ **/
 class WebObject {
+  /**
+   * Creates a new WebObject passing in an existing DOM element
+   **/
   constructor(element) {
     this.bindElement(element);
     element.classList.add(this.constructor.name);
   }
 
+  /**
+   * Set this object's element to a new given element and
+   * recalculate the new bounds
+   **/
   bindElement(element) {
     this.element = element;
     //update initial bounds
     let bounds = element.getBoundingClientRect();
     this.setBounds(bounds);
-    console.log(this.getBounds());
   }
 
+  /**
+   * Add or set style properties to the elemennt
+   **/
   styleElement(styles) {
     Object.assign(this.element.style, styles);
   }
 
-  //Put in any type of value(%, string, px, em)
+  /**
+   * Set the bounds(dimension and location) to the given bounds object
+   **/
   setBounds(bounds) {
     if (bounds.x)
       if (typeof bounds.x === "string") {
@@ -56,6 +70,9 @@ class WebObject {
       }
   }
 
+  /**
+   * Return the bounds(dimensions and location) of this object
+   **/
   getBounds() {
     return {
       x: this.x,
@@ -65,3 +82,11 @@ class WebObject {
     };
   }
 }
+
+/**
+ * Custom Errors
+ *
+ * @author Christian Wang
+ * @version 1.0
+ **/
+class WebFootError extends Error {}

@@ -3,7 +3,7 @@
  * and an ending event
  *
  * @author Christian Wang
- * @version Sept 2016
+ * @version 1.0
  */
 class Timer {
   /**

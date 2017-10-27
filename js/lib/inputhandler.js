@@ -1,4 +1,13 @@
+/**
+ * Manages event listeners for an element
+ *
+ *@author Christian Wang
+ *@version 1.0
+ **/
 class InputHandler {
+  /**
+   * Creates a default InputHandler with properties
+   **/
   constructor() {
     this.input = {
       keys: [],
@@ -6,6 +15,9 @@ class InputHandler {
     };
   }
 
+  /**
+   * Listens on element for events given
+   **/
   targetEvents(element, events) {
     let obj = this;
     if (events.keydown)
@@ -23,10 +35,16 @@ class InputHandler {
     }
   }
 
+  /**
+   * Returns the keys that are pressed
+   **/
   get keys() {
     return this.input.keys;
   }
 
+  /**
+   * Returns true if the element has been clicked
+   **/
   get click() {
     if (this.input.click) {
       //reset

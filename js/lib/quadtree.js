@@ -1,6 +1,14 @@
-//Quadtree Implementation
-//TODO Allow quadtree to have a reference to an actor
+/**
+ *Quadtree Implementation
+ *
+ * @author Christian Wang
+ * @version 1.0
+ **/
 class QuadTree {
+  /**
+   * Creates a new QuadTree with a reference to an existing webObject,
+   * the current level the node exists in and the bounds(dimensions and location) it has
+   **/
   constructor(webObject, level, bounds) {
     //Reference to webObject
     this.webObject = webObject;
