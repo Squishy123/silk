@@ -5,8 +5,10 @@ s.styleElement({
 
 
 s.setBounds({
-  width: 500,
-  height: 500
+  width: "75vh",
+  height: "75vh",
+  x: "50%",
+  y: "50%"
 })
 
 
