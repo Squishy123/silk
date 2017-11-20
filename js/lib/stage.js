@@ -5,7 +5,7 @@
  * @author Christian Wang
  * @version 1.0
  **/
-class Stage extends WebObject {
+export class Stage extends WebObject {
   /**
    * Creates a new Stage with a given element
    **/

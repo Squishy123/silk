@@ -4,7 +4,7 @@
  *@author Christian Wang
  *@version 1.0
  **/
-class InputHandler {
+export class InputHandler {
   /**
    * Creates a default InputHandler with properties
    **/

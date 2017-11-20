@@ -1,4 +1,4 @@
-class Tile extends Actor {
+export class Tile extends Actor {
   constructor() {
     super();
   }

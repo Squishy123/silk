@@ -4,7 +4,7 @@
  * @author Christian Wang
  * @version Oct 2017
  **/
-class Refresh {
+export class Refresh {
   //Function that is to be run at RPS(refreshes per seconds)
   constructor(funct, rps) {
     this.funct = funct;

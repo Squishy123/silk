@@ -4,7 +4,7 @@
  * @author Christian Wang
  * @version 1.0
  **/
-class QuadTree {
+export class QuadTree {
   /**
    * Creates a new QuadTree with a reference to an existing webObject,
    * the current level the node exists in and the bounds(dimensions and location) it has

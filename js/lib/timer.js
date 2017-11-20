@@ -5,7 +5,7 @@
  * @author Christian Wang
  * @version 1.0
  */
-class Timer {
+export class Timer {
   /**
    * Default constructor for timer object
    * Starts the timer

@@ -4,7 +4,7 @@
  * @author Christian Wang
  * @version 1.0
  **/
-class Actor extends WebObject {
+export class Actor extends WebObject {
   /**
    * Creates a new Actor with a div element
    **/

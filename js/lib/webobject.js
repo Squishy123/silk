@@ -4,7 +4,7 @@
  * @author Christian Wang
  * @version 1.0
  **/
-class WebObject {
+export class WebObject {
   /**
    * Creates a new WebObject passing in an existing DOM element
    **/
