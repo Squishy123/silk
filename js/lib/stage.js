@@ -64,8 +64,8 @@ class Stage extends WebObject {
    * Returns true if 2 objects are colliding according to SAT algorithm
    **/
   checkCollision(object1, object2) {
-    if (object1.x < object2.x + object2.width && object1.x + object1.width > object2.x &&
-      object1.y < object2.y + object2.height && object1.y + object1.height > object2.y) {
+    if (object1.getBounds().x < object2.getBounds().x + object2.getBounds().width && object1.getBounds().x + object1.getBounds().width > object2.getBounds().x &&
+      object1.getBounds().y < object2.getBounds().y + object2.getBounds().height && object1.getBounds().y + object1.getBounds().height > object2.getBounds().y) {
       return true;
     }
     return false;
@@ -92,9 +92,10 @@ class Stage extends WebObject {
   removeObject(actor) {
     actor.stage = null;
     actor.stop();
-    this.objectsInStage = this.objectsInStage.filter(function(element) {
-      return element != actor;
-    });
+    let i = this.objectsInStage.findIndex(a => (a.getBounds() === actor.getBounds()));
+    if (i != -1) {
+      this.objectsInStage.splice(i, 1);
+    }
     this.element.removeChild(actor.element);
   }
 
