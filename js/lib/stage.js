@@ -20,6 +20,10 @@ class Stage extends SilkObject {
 
     this.renderTicks = 0;
     this.updateTicks = 0;
+
+    //FPS TESTER
+    this.fpsTimer = new Timer();
+    this.fps = 0;
   }
 
   /**
@@ -57,8 +61,14 @@ class Stage extends SilkObject {
   update() {
     if (!this.running) return;
     window.requestAnimationFrame(this.update.bind(this));
+    if(this.fpsTimer.millisecondsElapsed() >= 1000) {
+      this.fpsTimer.mark();
+      console.log(this.fps);
+      this.fps = 0;
+    }
     if (this.updateTimer.millisecondsElapsed() > (1000 / this.updateTicks)) {
       this.updateTimer.mark();
+      this.fps++;
       this.actors.forEach(function(actor) {
         if (actor.update)
           actor.update();

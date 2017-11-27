@@ -13,7 +13,7 @@ c.setBounds({
   y: 0
 });
 
-c.start(120, 120);
+c.start(60, 60);
 
 let tiles = [new Tile(), new Tile(), new Tile()];
 tiles.forEach(function(t) {
