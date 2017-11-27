@@ -23,12 +23,10 @@ class InputHandler {
     if (events.keydown)
       element.addEventListener("keydown", function(e) {
         obj.input.keys[e.which] = true;
-        e.preventDefault();
       });
     if (events.keyup)
       element.addEventListener("keyup", function(e) {
         obj.input.keys[e.which] = false;
-        e.preventDefault();
       });
     if (events.click) {
       element.addEventListener("click", function(e) {

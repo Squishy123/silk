@@ -99,7 +99,7 @@ class Stage extends WebObject {
   }
 
   /**
-   * Retunrs all the child objects in this stage
+   * Returns all the child objects in this stage
    **/
   getObjects() {
     return this.objectsInStage;

@@ -1,5 +1,5 @@
 /**
- * A basic DOM object
+ * 
  *
  * @author Christian Wang
  * @version 1.0
@@ -25,7 +25,7 @@ class WebObject {
   }
 
   /**
-   * Add or set style properties to the elemennt
+   * Add or set style properties to the element
    **/
   styleElement(styles) {
     Object.assign(this.element.style, styles);
