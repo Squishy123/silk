@@ -38,57 +38,6 @@ class Timer {
   }
 }
 /**
- * Controls the rate at which a function is looped
- *
- * @author Christian Wang
- * @version Oct 2017
- **/
-class Refresh {
-  //Function that is to be run at RPS(refreshes per seconds)
-  constructor(funct, rps) {
-    this.funct = funct;
-    this.rps = rps;
-  }
-
-  //Starts the refresh cycle
-  start() {
-    this.running = false;
-    this.rpsInterval = 1000 / this.rps;
-    this.timer = new Timer();
-    if (this.rps > 0)
-      this.loop();
-    else
-      console.log(new WebFootError("Your RPS is at 0 so I'm not even gonna start"));
-  }
-
-  //Stops the refresh cycle
-  stop() {
-    this.running = true;
-  }
-
-  //Function that is refreshed every cycle
-  loop() {
-    if (this.running) return;
-    //Request a frame refresh
-    window.requestAnimationFrame(this.loop.bind(this));
-
-    //If enough time has passed call the function
-    let millisElapsed = this.timer.millisecondsElapsed();
-    this.currentRPS = millisElapsed / this.rpsInterval * this.rps;
-    if (millisElapsed > this.rpsInterval) {
-      this.timer.mark();
-
-      //If the function is undefined output an error and running running
-      if (!this.funct) {
-        this.running = true;
-        console.log(new WebFootError("The function you are trying to refresh is undefined"));
-      } else {
-        this.funct();
-      }
-    }
-  }
-}
-/**
  *Quadtree Implementation
  *
  * @author Christian Wang
@@ -242,12 +191,12 @@ class QuadTree {
   }
 }
 /**
- * A basic DOM object
+ *
  *
  * @author Christian Wang
  * @version 1.0
  **/
-class WebObject {
+class SilkObject {
   /**
    * Creates a new WebObject passing in an existing DOM element
    **/
@@ -268,7 +217,7 @@ class WebObject {
   }
 
   /**
-   * Add or set style properties to the elemennt
+   * Add or set style properties to the element
    **/
   styleElement(styles) {
     Object.assign(this.element.style, styles);
@@ -332,23 +281,21 @@ class WebObject {
  * @author Christian Wang
  * @version 1.0
  **/
-class WebFootError extends Error {}
+class SilkError extends Error {}
 /**
  * An DOM object with it's own layer of interactivity
  *
  * @author Christian Wang
  * @version 1.0
  **/
-class Actor extends WebObject {
+class Actor extends SilkObject {
   /**
    * Creates a new Actor with a div element
    **/
   constructor() {
     super(document.createElement('div'));
+    //World stuff
     this.stage = null;
-    this.objectsInStage = [];
-    this.defaultUpdateTicksPerSecond = 60;
-    this.defaultRenderTicksPerSecond = 60;
   }
 
   /**
@@ -372,85 +319,12 @@ class Actor extends WebObject {
     });
   }
 
-  update() {
-    let obj = this;
-    if (obj.stage == null) obj.refreshUpdate.stop();
-  }
-
   render() {
-    let obj = this;
-    if (obj.stage == null) obj.refreshRender.stop();
+
   }
 
+  update() {
 
-  /**
-   * Starts the update and or render loops of this actor
-   * If there is no render or update function, an error is thrown
-   **/
-  start(updateTicksPerSecond, renderTicksPerSecond) {
-    this.init();
-    if (this.update) {
-      let update = () => {
-        this.update()
-      };
-      this.refreshUpdate = new Refresh(update, updateTicksPerSecond);
-    } else console.log(new WebFootError("Actor has no update function"));
-
-    if (this.render) {
-      let render = () => {
-        this.render()
-      };
-      this.refreshRender = new Refresh(render, renderTicksPerSecond);
-
-      this.refreshUpdate.start();
-      this.refreshRender.start();
-    } else console.log(new WebFootError("Actor has no render function"));
-  }
-
-  /**
-   * Stops the update and or render loops of this actor
-   * If there is no render or update function, an error is thrown
-   **/
-  stop() {
-    if (this.refreshUpdate)
-      this.refreshUpdate.stop();
-    else console.log(new WebFootError("Actor has no update function"));
-    if (this.refreshRender)
-      this.refreshRender.stop();
-    else console.log(new WebFootError("Actor has no render function"));
-  }
-
-  /**
-   * Adds a child object to this actor
-   **/
-  addObject(actor) {
-    actor.stage = this;
-    this.objectsInStage.push({
-      "actor": actor
-    });
-    this.element.appendChild(actor.element);
-    //Add this actor to the quadtree
-    //  this.quad.insert(actor, actor.getBounds());
-
-    actor.start(this.defaultUpdateTicksPerSecond, this.defaultRenderTicksPerSecond);
-  }
-
-  /**
-   * Removes a child object from this actor
-   **/
-  removeObject(actor) {
-    actor.stage = null;
-    this.objectsInStage = this.objectsInStage.filter(function(element) {
-      return element != actor;
-    });
-    this.element.removeChild(actor.element);
-  }
-
-  /**
-   * Returns all the child objects in this actor's scope
-   **/
-  getObjects() {
-    return this.objectsInStage;
   }
 }
 /**
@@ -460,29 +334,76 @@ class Actor extends WebObject {
  * @author Christian Wang
  * @version 1.0
  **/
-class Stage extends WebObject {
+class Stage extends SilkObject {
   /**
    * Creates a new Stage with a given element
    **/
   constructor(element) {
     super(element);
-    this.objectsInStage = [];
-    //How many times the actors render and update will loop per second
-    this.defaultUpdateTicksPerSecond = 60;
-    this.defaultRenderTicksPerSecond = 60;
-    this.start();
+    this.actors = [];
+    this.running = false;
+
+    //Timers for ticks
+    this.renderTimer = new Timer();
+    this.updateTimer = new Timer();
+
+    this.renderTicks = 0;
+    this.updateTicks = 0;
+
+    //FPS TESTER
+    this.fpsTimer = new Timer();
+    this.fps = 0;
   }
 
   /**
    * Creates a new QuadTree and sets it to the current bounds
    **/
-  start() {
+  start(renderTicks, updateTicks) {
     this.quad = new QuadTree(this, 0, {
       x: 0,
       y: 0,
       width: this.element.getBoundingClientRect().width,
       height: this.height
     });
+
+    this.renderTicks = renderTicks;
+    this.updateTicks = updateTicks;
+
+    this.running = true;
+    this.render();
+    this.update();
+  }
+
+  render() {
+    if (!this.running) return;
+    window.requestAnimationFrame(this.render.bind(this));
+    if (this.renderTimer.millisecondsElapsed() > (1000 / this.renderTicks)) {
+      this.renderTimer.mark();
+      this.actors.forEach(function(actor) {
+        if (actor.render)
+          actor.render();
+      });
+      this.render();
+    }
+  }
+
+  update() {
+    if (!this.running) return;
+    window.requestAnimationFrame(this.update.bind(this));
+    if(this.fpsTimer.millisecondsElapsed() >= 1000) {
+      this.fpsTimer.mark();
+      console.log(this.fps);
+      this.fps = 0;
+    }
+    if (this.updateTimer.millisecondsElapsed() > (1000 / this.updateTicks)) {
+      this.updateTimer.mark();
+      this.fps++;
+      this.actors.forEach(function(actor) {
+        if (actor.update)
+          actor.update();
+      });
+      this.update();
+    }
   }
 
   /**
@@ -504,7 +425,7 @@ class Stage extends WebObject {
     let cC = (obj1, obj2) => {
       return this.checkCollision(obj1, obj2)
     };
-    this.objectsInStage.forEach(function(e) {
+    this.actors.forEach(function(e) {
       quad.retrieve(returnObjs, object1).forEach(function(obj) {
         if (obj)
           if (obj != object1)
@@ -519,10 +440,11 @@ class Stage extends WebObject {
    * Returns true if 2 objects are colliding according to SAT algorithm
    **/
   checkCollision(object1, object2) {
-    if (object1.x < object2.x + object2.width && object1.x + object1.width > object2.x &&
-      object1.y < object2.y + object2.height && object1.y + object1.height > object2.y) {
-      return true;
-    }
+    if (object1 instanceof SilkObject && object2 instanceof SilkObject)
+      if (object1.getBounds().x < object2.getBounds().x + object2.getBounds().width && object1.getBounds().x + object1.getBounds().width > object2.getBounds().x &&
+        object1.getBounds().y < object2.getBounds().y + object2.getBounds().height && object1.getBounds().y + object1.getBounds().height > object2.getBounds().y) {
+        return true;
+      }
     return false;
   }
 
@@ -531,14 +453,11 @@ class Stage extends WebObject {
    **/
   addObject(actor) {
     actor.stage = this;
-    this.objectsInStage.push({
-      "actor": actor
-    });
+    this.actors.push(actor);
     this.element.appendChild(actor.element);
     //Add this actor to the quadtree
     this.quad.insert(actor, actor.getBounds());
-
-    actor.start(this.defaultUpdateTicksPerSecond, this.defaultRenderTicksPerSecond);
+    actor.init();
   }
 
   /**
@@ -546,17 +465,19 @@ class Stage extends WebObject {
    **/
   removeObject(actor) {
     actor.stage = null;
-    this.objectsInStage = this.objectsInStage.filter(function(element) {
-      return element != actor;
-    });
+    actor.stop();
+    let i = this.objectsInStage.findIndex(a => (a.getBounds() === actor.getBounds()));
+    if (i != -1) {
+      this.objectsInStage.splice(i, 1);
+    }
     this.element.removeChild(actor.element);
   }
 
   /**
-   * Retunrs all the child objects in this stage
+   * Returns all the child objects in this stage
    **/
   getObjects() {
-    return this.objectsInStage;
+    return this.actors;
   }
 }
 /**
