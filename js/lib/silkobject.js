@@ -1,10 +1,10 @@
 /**
- * 
+ *
  *
  * @author Christian Wang
  * @version 1.0
  **/
-class WebObject {
+class SilkObject {
   /**
    * Creates a new WebObject passing in an existing DOM element
    **/
@@ -89,4 +89,4 @@ class WebObject {
  * @author Christian Wang
  * @version 1.0
  **/
-class WebFootError extends Error {}
+class SilkError extends Error {}
