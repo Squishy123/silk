@@ -16,12 +16,12 @@ gulp.task('start-app', ['default', 'build-library'], function() {
 
 gulp.task('build-library', function() {
   util.log("== Building Library ==")
-  return gulp.src(`${SRC_PATH}/lib/*.js`)
+  return gulp.src(`${SRC_PATH}/js/lib/*.js`)
     .pipe(jshint({
       esversion: 6
     }))
     .pipe(jshint.reporter('default'))
-    .pipe(gulp.dest(`${APP_PATH}/src/lib`))
+    .pipe(gulp.dest(`${APP_PATH}/src/js/lib`))
     .on('end', () => {
       util.log("== Finished Building Library ==")
     });
