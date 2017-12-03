@@ -1,5 +1,43 @@
-var gulp = require('gulp');
+// Include gulp
+const gulp = require('gulp');
 
+// Include plugins
+const [jshint, concat, rename, uglify, util] = [require('gulp-jshint'), require('gulp-concat'), require('gulp-rename'), require('gulp-uglify'), require('gulp-util')];
+
+const [SRC_PATH, APP_PATH, BUILD_PATH] = ['src/lib/*.js', 'app', 'build'];
 gulp.task('default', function() {
-  console.log("Hello World Gulp!");
+  util.log("== Welcome to Silk-Generator ==")
+});
+
+gulp.task('start-app', ['default', 'build-library'], function() {
+  util.log("== Starting App ==")
+
+});
+
+gulp.task('build-library', function() {
+  util.log("== Building Library ==")
+  return gulp.src(`${SRC_PATH}/lib/*.js`)
+    .pipe(jshint({
+      esversion: 6
+    }))
+    .pipe(jshint.reporter('default'))
+    .pipe(gulp.dest(`${APP_PATH}/src/lib`))
+    .on('end', () => {
+      util.log("== Finished Building Library ==")
+    });
+});
+
+gulp.task('build-webpage', function() {
+  gulp.src(`${SRC_PATH}/index.html`)
+    .pipe(gulp.dest(`${SRC_PATH}`))
+});
+
+gulp.task('export', function() {
+  util.log("== Starting Export ==")
+  gulp.src(`${APP_PATH}/src/lib/*.js`)
+    .pipe(concat('silk-lib.js'))
+    .pipe(gulp.dest(`${BUILD_PATH}/src/lib`))
+    .on('end', () => {
+      util.log("== Finished Export ==")
+    });
 });
