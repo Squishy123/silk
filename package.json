@@ -26,5 +26,8 @@
     "gulp-util": "^3.0.8",
     "jshint": "^2.9.5",
     "uglify-js": "^3.2.0"
+  },
+  "dependencies": {
+    "del": "^3.0.0"
   }
 }
