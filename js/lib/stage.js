@@ -61,7 +61,7 @@ class Stage extends SilkObject {
   update() {
     if (!this.running) return;
     window.requestAnimationFrame(this.update.bind(this));
-    if(this.fpsTimer.millisecondsElapsed() >= 1000) {
+    if (this.fpsTimer.millisecondsElapsed() >= 1000) {
       this.fpsTimer.mark();
       console.log(this.fps);
       this.fps = 0;
@@ -122,12 +122,15 @@ class Stage extends SilkObject {
   /**
    * Adds an actor to this stage
    **/
-  addObject(actor) {
+  addObject(actor, bounds) {
     actor.stage = this;
     this.actors.push(actor);
     this.element.appendChild(actor.element);
     //Add this actor to the quadtree
-    this.quad.insert(actor, actor.getBounds());
+    if (bounds != null)
+      this.quad.insert(actor, bounds);
+    else
+      this.quad.insert(actor, actor.getBounds());
     actor.init();
   }
 
