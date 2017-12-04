@@ -1,6 +1,4 @@
-/**
- *
- *
+ /**
  * @author Christian Wang
  * @version 1.0
  **/
