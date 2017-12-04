@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/Squishy123/silk#readme",
   "devDependencies": {
-    "colors": "^1.1.2",
+    "chalk": "^2.3.0",
     "gulp": "^3.9.1",
     "gulp-concat": "^2.6.1",
     "gulp-jshint": "^2.0.4",
