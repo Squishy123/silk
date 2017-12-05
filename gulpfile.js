@@ -12,6 +12,8 @@ gulp.task('default', function() {
   util.log(chalk.bgCyan(chalk.black("== Welcome to Silk-Generator ==")))
 });
 
+gulp.task('start', ['connect', 'watchSRC', 'watchLIB'])
+
 //start the server
 gulp.task('connect', function() {
   connect.server({
@@ -22,10 +24,15 @@ gulp.task('connect', function() {
 
 //update html
 gulp.task('updateHTML', function() {
+    util.log(chalk.bgCyan(chalk.black("== Updating Webpage ==")))
   gulp.src(`${SRC_PATH}/*.html`)
-    .pipe(gulp.dest(`${APP_PATH}/`, {ext: '.html'}));
+    .pipe(gulp.dest(`${APP_PATH}/`, {
+      ext: '.html'
+    }));
   gulp.src(`${APP_PATH}/*.html`)
     .pipe(connect.reload());
+
+      util.log(chalk.bgCyan(chalk.black("== Finished Update ==")))
 });
 
 //watch for changes
@@ -33,22 +40,23 @@ gulp.task('watchSRC', function() {
   gulp.watch([`${SRC_PATH}/*.html`], ['updateHTML'])
 });
 
-gulp.task('start-app', ['default', 'build-library', 'build-webpage'], function() {
-  util.log(chalk.bgCyan(chalk.black("== Starting App ==")))
-
-});
-
-gulp.task('build-library', function() {
-  util.log(chalk.bgCyan(chalk.black("== Building Library ==")))
-  return gulp.src(`${SRC_PATH}/js/lib/*.js`)
+//updates library files
+gulp.task('updateLIB', function() {
+  util.log(chalk.bgCyan(chalk.black("== Updating Library ==")))
+  gulp.src(`${SRC_PATH}/js/lib/*.js`)
     .pipe(jshint({
       esversion: 6
     }))
-    .pipe(jshint.reporter('default'))
-    .pipe(gulp.dest(`${APP_PATH}/src/js/lib/`))
-    .on('end', () => {
-      util.log(chalk.bgCyan(chalk.black("== Finished Build ==")))
-    });
+    .pipe(jshint.reporter('default'));
+  gulp.src(`${SRC_PATH}/js/lib/*.js`)
+    .pipe(concat('silk-lib.js'))
+    .pipe(gulp.dest(`${APP_PATH}/src/js/lib`))
+      util.log(chalk.bgCyan(chalk.black("== Finished Update ==")))
+});
+
+//watch for changes
+gulp.task('watchLIB', function() {
+  gulp.watch([`${SRC_PATH}/js/lib/*.js`], ['updateLIB'])
 });
 
 gulp.task('build-webpage', function() {
@@ -70,10 +78,6 @@ gulp.task('cleanup', function() {
   util.log(chalk.bgCyan(chalk.black("== Cleaning Up ==")))
   //delete app files
   del(APP_PATH, {
-    force: true
-  });
-  //delete build
-  del(BUILD_PATH, {
     force: true
   });
 });
