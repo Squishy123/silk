@@ -19,16 +19,15 @@
   "homepage": "https://github.com/Squishy123/silk#readme",
   "devDependencies": {
     "chalk": "^2.3.0",
+    "del": "^3.0.0",
     "gulp": "^3.9.1",
     "gulp-concat": "^2.6.1",
+    "gulp-connect": "^5.0.0",
     "gulp-jshint": "^2.0.4",
     "gulp-rename": "^1.2.2",
     "gulp-uglify": "^3.0.0",
     "gulp-util": "^3.0.8",
     "jshint": "^2.9.5",
     "uglify-js": "^3.2.0"
-  },
-  "dependencies": {
-    "del": "^3.0.0"
   }
 }
