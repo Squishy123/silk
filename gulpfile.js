@@ -12,7 +12,7 @@ gulp.task('default', function() {
   util.log(chalk.bgCyan(chalk.black("== Welcome to Silk-Generator ==")))
 });
 
-gulp.task('start', ['connect', 'watchSRC', 'watchLIB'])
+gulp.task('start', ['build', 'connect', 'watchSRC', 'watchLIB'])
 
 //start the server
 gulp.task('connect', function() {
@@ -24,7 +24,7 @@ gulp.task('connect', function() {
 
 //update html
 gulp.task('updateHTML', function() {
-    util.log(chalk.bgCyan(chalk.black("== Updating Webpage ==")))
+  util.log(chalk.bgCyan(chalk.black("== Updating Webpage ==")))
   gulp.src(`${SRC_PATH}/*.html`)
     .pipe(gulp.dest(`${APP_PATH}/`, {
       ext: '.html'
@@ -32,7 +32,7 @@ gulp.task('updateHTML', function() {
   gulp.src(`${APP_PATH}/*.html`)
     .pipe(connect.reload());
 
-      util.log(chalk.bgCyan(chalk.black("== Finished Update ==")))
+  util.log(chalk.bgCyan(chalk.black("== Finished Update ==")))
 });
 
 //watch for changes
@@ -51,7 +51,7 @@ gulp.task('updateLIB', function() {
   gulp.src(`${SRC_PATH}/js/lib/*.js`)
     .pipe(concat('silk-lib.js'))
     .pipe(gulp.dest(`${APP_PATH}/src/js/lib`))
-      util.log(chalk.bgCyan(chalk.black("== Finished Update ==")))
+  util.log(chalk.bgCyan(chalk.black("== Finished Update ==")))
 });
 
 //watch for changes
@@ -59,20 +59,33 @@ gulp.task('watchLIB', function() {
   gulp.watch([`${SRC_PATH}/js/lib/*.js`], ['updateLIB'])
 });
 
-gulp.task('build-webpage', function() {
-  gulp.src(`${SRC_PATH}/index.html`)
-    .pipe(gulp.dest(`${APP_PATH}`))
+//copy over src dir
+gulp.task('copy', function() {
+  //copy dir
+  gulp.src(`${SRC_PATH}/**/*`)
+    .pipe(gulp.dest(`${APP_PATH}/`));
 });
 
-gulp.task('export', function() {
-  util.log(chalk.bgCyan(chalk.black("== Starting Export ==")))
-  gulp.src(`${APP_PATH}/src/js/lib/*.js`)
-    .pipe(concat('silk-lib.js'))
-    .pipe(gulp.dest(`${BUILD_PATH}/src/lib`))
-    .on('end', () => {
-      util.log(chalk.bgCyan(chalk.black("== Finished Export ==")))
-    });
+//delete libjs
+gulp.task('rmlib', function() {
+  del(`${APP_PATH}/js/lib/`, {
+    force: true
+  });
 });
+
+gulp.task('build', ['copy', 'rmlib'], function() {
+  util.log(chalk.bgCyan(chalk.black("== Starting Build ==")))
+  let buildOrder = require(`./${SRC_PATH}/js/lib/buildOrder.json`)["order"];
+  buildOrder.forEach(function(e) {
+    e = `${SRC_PATH}/js/lib/` + e;
+  });
+
+  //Add library
+  return gulp.src(buildOrder)
+    .pipe(concat('silk.min.js'))
+    .pipe(gulp.dest(`${APP_PATH}/js`));
+});
+
 
 gulp.task('cleanup', function() {
   util.log(chalk.bgCyan(chalk.black("== Cleaning Up ==")))
