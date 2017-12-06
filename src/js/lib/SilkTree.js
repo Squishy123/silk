@@ -4,13 +4,12 @@ class SilkTree {
     this.SilkProcesses = [];
   }
 
-  createElement(tagName, options, children) {
-    let createdElement = new SilkObject(tagName, options, children);
-    this.SilkObjects.push(createdElement);
-    return createdElement;
+  createElement(silkObject, processes) {
+    this.SilkObjects.push(silkObject);
+    this.SilkProcesses.push(processes);
   }
 
-  updateTree() {
+  render() {
 
   }
 }
