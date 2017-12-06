@@ -76,9 +76,11 @@ gulp.task('rmlib', function() {
 gulp.task('build', ['copy', 'rmlib'], function() {
   util.log(chalk.bgCyan(chalk.black("== Starting Build ==")))
   let buildOrder = require(`./${SRC_PATH}/js/lib/buildOrder.json`)["order"];
-  buildOrder.forEach(function(e) {
-    e = `${SRC_PATH}/js/lib/` + e;
-  });
+  for (let i = 0; i < buildOrder.length; i++) {
+    buildOrder[i] = `${SRC_PATH}/js/lib/${buildOrder[i]}`;
+  }
+
+  console.log(buildOrder);
 
   //Add library
   return gulp.src(buildOrder)
