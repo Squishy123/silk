@@ -2,7 +2,7 @@
 const gulp = require('gulp');
 
 // Include gulp plugins
-const [jshint, concat, rename, uglify, util, connect] = [require('gulp-jshint'), require('gulp-concat'), require('gulp-rename'), require('gulp-uglify'), require('gulp-util'), require('gulp-connect')];
+const [jshint, concat, rename, uglify, util, connect, babel] = [require('gulp-jshint'), require('gulp-concat'), require('gulp-rename'), require('gulp-uglify'), require('gulp-util'), require('gulp-connect'), require('gulp-babel')];
 
 // Include node plugins
 const [del, chalk] = [require('del'), require('chalk')];
@@ -85,6 +85,7 @@ gulp.task('build', ['copy', 'rmlib'], function() {
   //Add library
   return gulp.src(buildOrder)
     .pipe(concat('silk.min.js'))
+    .pipe(babel())
     .pipe(gulp.dest(`${APP_PATH}/js`));
 });
 

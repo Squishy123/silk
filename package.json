@@ -18,9 +18,12 @@
   },
   "homepage": "https://github.com/Squishy123/silk#readme",
   "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
     "chalk": "^2.3.0",
     "del": "^3.0.0",
     "gulp": "^3.9.1",
+    "gulp-babel": "^7.0.0",
     "gulp-concat": "^2.6.1",
     "gulp-connect": "^5.0.0",
     "gulp-jshint": "^2.0.4",
