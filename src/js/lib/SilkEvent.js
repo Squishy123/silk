@@ -1,6 +1,6 @@
 class SilkEvent {
-  constructor(events, callback) {
-    this.events = events;
+  constructor(eventName, callback) {
+    this.eventName = eventName
     this.callback = callback;
   }
 }
