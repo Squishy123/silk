@@ -1,3 +1,0 @@
-{
-  "order": ["Timer.js", "QuadTree", "InputHandler", "SilkObject.js", "Actor.js", "Stage.js"]
-}

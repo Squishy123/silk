@@ -32,7 +32,6 @@ class Stage extends SilkObject {
   start(renderTicks, updateTicks) {
     this.renderTicks = renderTicks;
     this.updateTicks = updateTicks;
-
     this.running = true;
     this.render();
     this.update();
@@ -100,8 +99,8 @@ class Stage extends SilkObject {
   removeActor(actor) {
     actor.stage = null;
     actor.stop();
-    for(let i = 0; i < this.actors.length; i++) {
-      if(Object.is(actor, this.actors[i]))
+    for (let i = 0; i < this.actors.length; i++) {
+      if (Object.is(actor, this.actors[i]))
         this.actors.splice(i, 1);
     }
     actor.destroy();

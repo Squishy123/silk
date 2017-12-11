@@ -75,16 +75,29 @@ gulp.task('rmlib', function() {
 
 gulp.task('build', ['copy', 'rmlib'], function() {
   util.log(chalk.bgCyan(chalk.black("== Starting Build ==")))
-  let buildOrder = require(`./${SRC_PATH}/js/lib/buildOrder.json`)["order"];
-  for (let i = 0; i < buildOrder.length; i++) {
-    buildOrder[i] = `${SRC_PATH}/js/lib/${buildOrder[i]}`;
+  let libraryBuildOrder = require(`./${SRC_PATH}/js/buildOrder.json`)["Library-Order"];
+  for (let i = 0; i < libraryBuildOrder.length; i++) {
+    libraryBuildOrder[i] = `${SRC_PATH}/js/lib/${libraryBuildOrder[i]}`;
   }
 
-  console.log(buildOrder);
+  console.log(libraryBuildOrder);
 
   //Add library
-  return gulp.src(buildOrder)
+  gulp.src(libraryBuildOrder)
     .pipe(concat('silk.min.js'))
+    .pipe(babel())
+    .pipe(gulp.dest(`${APP_PATH}/js`));
+
+  //Build SRC
+  let SRCOrder = require(`./${SRC_PATH}/js/buildOrder.json`)["SRC-Order"];
+  for (let i = 0; i < SRCOrder.length; i++) {
+    SRCOrder[i] = `${SRC_PATH}/js/${SRCOrder[i]}`;
+  }
+
+  console.log(SRCOrder);
+
+  gulp.src(SRCOrder)
+    .pipe(concat('app.min.js'))
     .pipe(babel())
     .pipe(gulp.dest(`${APP_PATH}/js`));
 });
