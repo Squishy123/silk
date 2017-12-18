@@ -1,10 +1,9 @@
 class Tile extends Actor {
   constructor() {
-    super();
+    super(document.createElement('div'));
   }
 
-  init() {
-    super.init();
+  preload() {
     let obj = this;
     obj.styleElement({
       "position": 'absolute',

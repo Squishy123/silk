@@ -36,6 +36,7 @@ class SilkObject {
     if (bounds.x)
       if (typeof bounds.x === "string") {
         this.element.style["left"] = bounds.x;
+        //recalc based on bounds
         this.x = this.element.getBoundingClientRect().x;
       } else {
         //assume its px
@@ -45,6 +46,7 @@ class SilkObject {
     if (bounds.y)
       if (typeof bounds.y === "string") {
         this.element.style["top"] = bounds.y;
+        //recalc based on bounds
         this.y = this.element.getBoundingClientRect().y;
       } else {
         this.element.style["top"] = bounds.y + "px";
@@ -53,6 +55,7 @@ class SilkObject {
     if (bounds.width)
       if (typeof bounds.width === "string") {
         this.element.style["width"] = bounds.width;
+        //recalc based on bounds
         this.width = this.element.getBoundingClientRect().width;
       } else {
         this.element.style["width"] = bounds.width + "px";
@@ -61,6 +64,7 @@ class SilkObject {
     if (bounds.height)
       if (typeof bounds.height === "string") {
         this.element.style["height"] = bounds.height;
+        //recalc based on bounds
         this.height = this.element.getBoundingClientRect().height;
       } else {
         this.element.style["height"] = bounds.height + "px";

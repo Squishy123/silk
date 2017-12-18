@@ -7,9 +7,11 @@ const [jshint, concat, rename, uglify, util, connect, babel] = [require('gulp-js
 // Include node plugins
 const [del, chalk] = [require('del'), require('chalk')];
 
+// Directory Paths
 const [SRC_PATH, APP_PATH, BUILD_PATH] = ['src', 'app', 'build'];
+
 gulp.task('default', function() {
-  util.log(chalk.bgCyan(chalk.black("== Welcome to Silk-Generator ==")))
+  util.log(chalk.bgCyan(chalk.black("== Welcome to Silk-Reactor ==")))
 });
 
 gulp.task('start', ['build', 'connect', 'watchSRC', 'watchLIB'])
@@ -56,7 +58,7 @@ gulp.task('updateLIB', function() {
 
 //watch for changes
 gulp.task('watchLIB', function() {
-  gulp.watch([`${SRC_PATH}/js/lib/*.js`], ['updateLIB'])
+  gulp.watch([`${SRC_PATH}/js/lib/*.js`], ['build'])
 });
 
 //copy over src dir

@@ -1,16 +1,14 @@
 class Player extends Actor {
   constructor() {
-    super();
+    super(document.createElement('div'));
   }
 
-  init() {
-    super.init();
-    this.vx = 5;
+  preload() {
+    this.vx = 10;
     this.vy = 5;
-    this.x = 200
-    this.y = 200;
 
     this.styleElement({
+      "position": 'absolute',
       "background-color": 'red',
     });
 
@@ -18,8 +16,8 @@ class Player extends Actor {
     this.setBounds({
       height: 50,
       width: 50,
-      x: this.x,
-      y: this.y
+      x: 200,
+      y: 200
     });
 
 
@@ -46,7 +44,6 @@ class Player extends Actor {
     if (this.inputHandler.keys[83]) this.y += this.vy;
     if (this.inputHandler.keys[65]) this.x -= this.vx;
     if (this.inputHandler.keys[68]) this.x += this.vx;
-
     this.setBounds({
       x: this.x,
       y: this.y
