@@ -4,7 +4,7 @@ class Player extends Actor {
   }
 
   preload() {
-    this.vx = 10;
+    this.vx = 5;
     this.vy = 5;
 
     this.styleElement({
