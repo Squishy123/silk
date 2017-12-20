@@ -48,7 +48,7 @@ gulp.task('update:html', function() {
 
 //watch changes for js app files
 gulp.task('watch:app', function() {
-  gulp.watch([`${SRC_PATH}/js/*.js`], ['clean:app', 'build:app'])
+  gulp.watch([`${SRC_PATH}/js/*.js`], ['build:app'])
 });
 
 gulp.task('build:app', function() {
@@ -60,14 +60,14 @@ gulp.task('build:app', function() {
 
   console.log(SRCOrder);
 
-  gulp.src(SRCOrder)
+  gulp.src(SRCOrder, {base: './'})
     .pipe(concat('app.min.js'))
     .pipe(jshint({
       esversion: 6
     }))
     .pipe(jshint.reporter('default'))
     .pipe(babel())
-    .pipe(gulp.dest(`${APP_PATH}/js`));
+    .pipe(gulp.dest(`./${APP_PATH}/js/`));
 
   gulp.src(`${APP_PATH}/app.min.js`)
     .pipe(connect.reload());

@@ -9,7 +9,7 @@ class Player extends Actor {
 
     this.styleElement({
       "position": 'absolute',
-      "background-color": 'red',
+      "background-color": 'orange',
     });
 
 
