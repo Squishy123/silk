@@ -1,8 +1,8 @@
 class Player extends Actor {
   constructor() {
-    //super(document.createElement('div'));
+    super(document.createElement('div'));
   }
-
+  
   preload() {
     this.vx = 5;
     this.vy = 5;

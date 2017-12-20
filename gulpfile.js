@@ -98,7 +98,7 @@ gulp.task('watch:library', function() {
   gulp.watch([`${SRC_PATH}/js/lib/*.js`], ['clean:library', 'build:library'])
 });
 
-gulp.task('build:library', ['clean:library'], function() {
+gulp.task('build:library', function() {
   util.log(chalk.bgCyan(chalk.black("== Starting Build ==")))
   let libraryBuildOrder = require(`./${SRC_PATH}/js/buildOrder.json`)["Library-Order"];
   for (let i = 0; i < libraryBuildOrder.length; i++) {
