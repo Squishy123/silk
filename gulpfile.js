@@ -5,10 +5,21 @@ const gulp = require('gulp');
 const [jshint, concat, rename, uglify, util, connect, babel] = [require('gulp-jshint'), require('gulp-concat'), require('gulp-rename'), require('gulp-uglify'), require('gulp-util'), require('gulp-connect'), require('gulp-babel')];
 
 // Include node plugins
-const [del, chalk] = [require('del'), require('chalk')];
+const [del, chalk, map] = [require('del'), require('chalk'), require('map-stream')];
 
 // Directory Paths
 const [SRC_PATH, APP_PATH, BUILD_PATH] = ['src', 'app', 'build'];
+const myReporter = map(function(file, cb) {
+  if(file.jshint.success) return cb(null, file);
+
+  console.log(`Error found in: ${file.path}`);
+  file.jshint.results.forEach(function(result) {
+    if(!result.error) return;
+    //print Error
+    console.log(`line ${result.error.line}, col ${result.error.character}, code ${result.error.code}, ${result.error.reason}`);
+  });
+  cb(null, file);
+});
 
 gulp.task('default', function() {
   util.log(chalk.bgCyan(chalk.black("== Welcome to Silk-Reactor ==")))
@@ -60,12 +71,14 @@ gulp.task('build:app', function() {
 
   console.log(SRCOrder);
 
-  gulp.src(SRCOrder, {base: './'})
+  gulp.src(SRCOrder, {
+      base: './'
+    })
     .pipe(concat('app.min.js'))
     .pipe(jshint({
       esversion: 6
     }))
-    .pipe(jshint.reporter('default'))
+    .pipe(myReporter)
     .pipe(babel())
     .pipe(gulp.dest(`./${APP_PATH}/js/`));
 
@@ -100,7 +113,7 @@ gulp.task('build:library', ['clean:library'], function() {
     .pipe(jshint({
       esversion: 6
     }))
-    .pipe(jshint.reporter('default'))
+    .pipe(myReporter)
     .pipe(babel())
     .pipe(gulp.dest(`${APP_PATH}/js`));
 
