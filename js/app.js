@@ -38,8 +38,35 @@
         y: height / 2 - this.getBounds().height / 2
       });
     }
+  }
 
-    update() {}
+  class Square extends Actor {
+    constructor(offsetX, offsetY) {
+      super(document.createElement('div'));
+      this.offsetX = offsetX;
+      this.offsetY = offsetY;
+    }
+
+    preload() {
+      this.styleElement({
+        "position": 'absolute',
+        "background-color": '#67D9D8',
+        "z-index": '-1'
+      });
+
+      this.setBounds({
+        width: 50,
+        height: 50
+      });
+    }
+
+    update() {
+      let [width, height] = [window.innerWidth, window.innerHeight];
+      this.setBounds({
+        x: width / 2 + width / 5 * Math.sin(1 / this.offsetX * Date.now()),
+        y: height / 2 + height / 5 * Math.cos(1 / this.offsetY * Date.now())
+      })
+    }
   }
 
   class Page extends Stage {
@@ -69,3 +96,6 @@
 
   let main = new Page();
   main.start(30, 30);
+  for (let i = 1; i < 5; i++) {
+    main.addActor(new Square(1000 + (i * 100), 1000 - (i * 100)));
+  }
