@@ -1,19 +1,29 @@
-  class Logo extends Actor {
+  class Info extends Actor {
     constructor() {
-      super(document.createElement('img'));
-      this.preload();
+      super(document.createElement('div'));
+      //this.preload();
     }
 
     preload() {
-      this.element.src = "res/silk-logo.png";
+      let logo = document.createElement('img');
+      logo.draggable = false;
+      logo.src = "res/silk-logo.png";
+      logo.style["width"] = '300px';
+      logo.style["height"] = '300px';
+      this.element.appendChild(logo);
+
+      let info = document.createElement('div');
+      info.innerHTML = "<h2 class='bold'>Silk.js</h2><p class='display'><a href='https://github.com/Squishy123/silk'>Silk</a> is a front-end utility library built in javascript.</p> <a class='btn display' href='js/silk.min.js' download>Download Alpha 1.0.0</a>";
+      this.element.appendChild(info);
 
       this.styleElement({
-        "position": 'absolute'
+        "position": 'absolute',
+        "text-align": 'center'
       });
 
       this.setBounds({
-        width: 200,
-        height: 200
+        width: 500,
+        height: 500
       });
 
       //movement stuff
@@ -29,31 +39,7 @@
       });
     }
 
-    update() {
-    }
-  }
-
-  class Info extends Actor {
-    constructor() {
-      super(document.createElement('h1'));
-      this.preload();
-    }
-
-    preload() {
-      this.element.innerHTML = "Coming Soon"
-
-      this.styleElement({
-        "position": 'absolute'
-      });
-    }
-
-    render() {
-      let [width, height] = [window.innerWidth, window.innerHeight];
-      this.setBounds({
-        x: width / 2 - this.getBounds().width / 2,
-        y: height * 0.75
-      });
-    }
+    update() {}
   }
 
   class Page extends Stage {
@@ -67,19 +53,12 @@
     }
 
     preload() {
-      let logo = new Logo();
+      let logo = new Info();
       let [width, height] = [window.innerWidth, window.innerHeight];
       this.addActor(logo, {
         x: width / 2 - logo.getBounds().width / 2,
         y: height / 2 - logo.getBounds().height / 2
       });
-      /**
-            let info = new Info();
-            this.addActor(info, {
-              x: width / 2,
-              y: height * 0.75
-            })
-            **/
     }
   }
 
