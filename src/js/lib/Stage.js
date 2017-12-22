@@ -64,7 +64,7 @@ class Stage extends SilkObject {
       this.now = Date.now();
       let elapsed = this.now - this.then;
       this.then = this.now;
-      this.fps = (1 / elapsed) * 100;
+      this.fps = (1 / elapsed).toFixed(2);
 
       this.actors.forEach(function(actor) {
         if (actor.update)
