@@ -36,7 +36,7 @@ class Stage extends SilkObject {
     this.renderTicks = renderTicks;
     this.updateTicks = updateTicks;
     this.running = true;
-    this.then = Date.now();
+    this.then = Date.now()/1000;
     this.render();
     this.update();
   }
@@ -61,7 +61,7 @@ class Stage extends SilkObject {
       this.updateTimer.mark();
 
       //fps
-      this.now = Date.now();
+      this.now = Date.now()/1000;
       let elapsed = this.now - this.then;
       this.then = this.now;
       this.fps = (1 / elapsed).toFixed(2);
