@@ -87,8 +87,6 @@ class Stage extends SilkObject {
     this.element.appendChild(actor.element);
     if (bounds != null)
       actor.setBounds(bounds);
-
-    actor.preload();
   }
 
   /**

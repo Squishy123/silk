@@ -12,6 +12,9 @@ class Actor extends SilkObject {
     super(element);
     //World stuff
     this.stage = null;
+
+    //preload
+    this.preload();
   }
 
   //Actor Processes
