@@ -52,6 +52,11 @@
       super.start(renderTicks, updateTicks);
     }
 
+    update() {
+      super.update();
+      document.getElementById('fps').innerHTML = `FPS: ${this.fps}`;
+    }
+
     preload() {
       let logo = new Info();
       let [width, height] = [window.innerWidth, window.innerHeight];
