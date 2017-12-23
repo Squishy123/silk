@@ -22,7 +22,7 @@
       });
 
       this.setBounds({
-        width: 475,
+        width: window.innerWidth*0.75,
         height: 500
       });
 
@@ -95,7 +95,7 @@
   }
 
   let main = new Page();
-  main.start(30, 30);
+  main.start(60, 60);
   for (let i = 1; i < 5; i++) {
     main.addActor(new Square(1000 + (i * 100), 1000 - (i * 100)));
   }
