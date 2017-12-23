@@ -22,7 +22,7 @@
       });
 
       this.setBounds({
-        width: 500,
+        width: 475,
         height: 500
       });
 
