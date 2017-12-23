@@ -1,7 +1,36 @@
   class Info extends Actor {
     constructor() {
       super(document.createElement('div'));
-      //this.preload();
+      let obj = this;
+      (function() {
+        var throttle = function(type, name, obj) {
+          obj = obj || window;
+          var running = false;
+          var func = function() {
+            if (running) {
+              return;
+            }
+            running = true;
+            requestAnimationFrame(function() {
+              obj.dispatchEvent(new CustomEvent(name));
+              running = false;
+            });
+          };
+          obj.addEventListener(type, func);
+        };
+
+        /* init - you can init any event */
+        throttle("resize", "optimizedResize");
+      })();
+
+      // handle event
+      window.addEventListener("optimizedResize", function() {
+        console.log("Resized");
+        obj.setBounds({
+          width: window.innerWidth * 0.75,
+          height: 500
+        });
+      });
     }
 
     preload() {
@@ -22,7 +51,7 @@
       });
 
       this.setBounds({
-        width: window.innerWidth*0.75,
+        width: window.innerWidth * 0.75,
         height: 500
       });
 
