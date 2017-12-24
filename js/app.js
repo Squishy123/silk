@@ -27,7 +27,7 @@
       window.addEventListener("optimizedResize", function() {
         console.log("Resized");
         obj.setBounds({
-          width: window.innerWidth * 0.75,
+          width: this.stage.windowWidth * 0.75,
           height: 500
         });
         //recenter
@@ -62,11 +62,12 @@
     }
 
     center() {
-      let [width, height] = [window.innerWidth, window.innerHeight];
-      this.setBounds({
-        x: width / 2 - this.getBounds().width / 2,
-        y: height / 2 - this.getBounds().height / 2
-      });
+      if (this.stage)
+        //let [width, height] = [window.innerWidth, window.innerHeight];
+        this.setBounds({
+          x: this.stage.windowWidth / 2 - this.getBounds().width / 2,
+          y: this.stage.windowHeight / 2 - this.getBounds().height / 2
+        });
     }
   }
 
@@ -91,17 +92,43 @@
     }
 
     update() {
-      let [width, height] = [window.innerWidth, window.innerHeight];
-      this.setBounds({
-        x: width / 2 + width / 5 * Math.sin(1 / this.offsetX * Date.now()),
-        y: height / 2 + height / 5 * Math.cos(1 / this.offsetY * Date.now())
-      })
+      if (this.stage.windowWidth)
+        this.setBounds({
+          x: this.stage.windowWidth / 2 + this.stage.windowWidth / 5 * Math.sin(1 / this.offsetX * Date.now()),
+          y: this.stage.windowHeight / 2 + this.stage.windowHeight / 5 * Math.cos(1 / this.offsetY * Date.now())
+        })
     }
   }
 
   class Page extends Stage {
     constructor() {
       super(document.getElementById('stage'));
+      (function() {
+        var throttle = function(type, name, obj) {
+          obj = obj || window;
+          var running = false;
+          var func = function() {
+            if (running) {
+              return;
+            }
+            running = true;
+            requestAnimationFrame(function() {
+              obj.dispatchEvent(new CustomEvent(name));
+              running = false;
+            });
+          };
+          obj.addEventListener(type, func);
+        };
+
+        /* init - you can init any event */
+        throttle("resize", "optimizedResize");
+      })();
+      let obj = this;
+      // handle event
+      window.addEventListener("optimizedResize", function() {
+        //console.log("Resized");
+        [obj.windowWidth, obj.windowHeight] = [window.innerWidth, window.innerHeight];
+      });
     }
 
     start(renderTicks, updateTicks) {
@@ -116,10 +143,10 @@
 
     preload() {
       let logo = new Info();
-      let [width, height] = [window.innerWidth, window.innerHeight];
+      [this.windowWidth, this.windowHeight] = [window.innerWidth, window.innerHeight];
       this.addActor(logo, {
-        x: width / 2 - logo.getBounds().width / 2,
-        y: height / 2 - logo.getBounds().height / 2
+        x: this.windowWidth / 2 - logo.getBounds().width / 2,
+        y: this.windowHeight / 2 - logo.getBounds().height / 2
       });
     }
   }
