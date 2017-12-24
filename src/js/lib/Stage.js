@@ -43,20 +43,20 @@ class Stage extends SilkObject {
 
   render() {
     if (!this.running) return;
-    window.requestAnimationFrame(this.render.bind(this));
+    window.requestAnimationFrame(this.render);
     if (this.renderTimer.millisecondsElapsed() > (1000 / this.renderTicks)) {
       this.renderTimer.mark();
       this.actors.forEach(function(actor) {
         if (actor.render)
           actor.render();
       });
-      this.render();
+      window.requestAnimationFrame(this.render);
     }
   }
 
   update() {
     if (!this.running) return;
-    window.requestAnimationFrame(this.update.bind(this));
+    window.requestAnimationFrame(this.update);
     if (this.updateTimer.millisecondsElapsed() > (1000 / this.updateTicks)) {
       this.updateTimer.mark();
 
@@ -70,7 +70,7 @@ class Stage extends SilkObject {
         if (actor.update)
           actor.update();
       });
-      this.update();
+      window.requestAnimationFrame(this.update);
     }
   }
 
