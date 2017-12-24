@@ -30,6 +30,8 @@
           width: window.innerWidth * 0.75,
           height: 500
         });
+        //recenter
+        obj.center();
       });
     }
 
@@ -55,12 +57,11 @@
         height: 500
       });
 
-      //movement stuff
-      this.vx = 5;
-      this.vy = 5;
+      //center it first
+      this.center();
     }
 
-    render() {
+    center() {
       let [width, height] = [window.innerWidth, window.innerHeight];
       this.setBounds({
         x: width / 2 - this.getBounds().width / 2,
