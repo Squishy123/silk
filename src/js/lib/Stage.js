@@ -36,51 +36,50 @@ class Stage extends SilkObject {
     this.renderTicks = renderTicks;
     this.updateTicks = updateTicks;
     this.running = true;
-    this.then = Date.now()/1000;
-    this.render();
-    this.update();
+    this.then = Date.now() / 1000;
+    window.requestAnimationFrame(this.render.bind(this));
+    window.requestAnimationFrame(this.update.bind(this));
   }
 
   render() {
-    if (!this.running) return;
-    window.requestAnimationFrame(this.render);
     if (this.renderTimer.millisecondsElapsed() > (1000 / this.renderTicks)) {
       this.renderTimer.mark();
       this.actors.forEach(function(actor) {
         if (actor.render)
           actor.render();
       });
-      window.requestAnimationFrame(this.render);
     }
+    window.requestAnimationFrame(this.render.bind(this));
   }
 
   update() {
-    if (!this.running) return;
-    window.requestAnimationFrame(this.update);
     if (this.updateTimer.millisecondsElapsed() > (1000 / this.updateTicks)) {
       this.updateTimer.mark();
-
       //fps
-      this.now = Date.now()/1000;
+      this.now = Date.now() / 1000;
       let elapsed = this.now - this.then;
       this.then = this.now;
       this.fps = (1 / elapsed).toFixed(2);
-
       this.actors.forEach(function(actor) {
         if (actor.update)
           actor.update();
       });
-      window.requestAnimationFrame(this.update);
+
     }
+    window.requestAnimationFrame(this.update.bind(this));
   }
 
   /**
    * Stops the actors in this stage from looping
    **/
   stop() {
+    this.running = false;
+    /**
     this.actors.forEach(function(e) {
       e.actor.stop();
-    });
+    });**/
+    window.cancelAnimationFrame(this.render);
+    window.cancelAnimationFrame(this.update);
   }
 
   /**
