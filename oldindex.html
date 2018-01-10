@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Silk - A Utility Library</title>
+  <link rel="shortcut icon" href="/silk/res/silk-logo.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"></meta>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+  <style>
+    html,
+    body {
+      height: 100%;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+    }
+
+    #footer {
+      background-color: #474044;
+      color: white;
+      padding-top: 1.5rem;
+    }
+
+    .content {
+      flex: 1 0 auto;
+    }
+
+    * {
+      font-family: 'Open Sans',
+      sans-serif;
+    }
+
+    .active {
+      font-weight: bold;
+    }
+
+    .text-center {
+      text-align: center;
+    }
+
+    #masthead {
+      background-color: #4F5165;
+      color: #fff;
+
+      padding-top: 5rem;
+      padding-bottom: 5rem;
+    }
+
+    #info {
+      padding-top: 2.5rem;
+    }
+  </style>
+
+</head>
+
+<body>
+  <div class="content">
+    <nav class="navbar navbar-expand-lg  fixed-top navbar-dark" style="background-color: #547AA5;">
+      <a class="navbar-brand" href="#">
+        <img src="res/silk-logo.svg" width="50" height="50" alt="">
+    </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+     <span class="navbar-toggler-icon"></span>
+   </button>
+      <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav">
+          <li class="nav-item active">
+            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/silk/pages/documentation.html">Documentation</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/silk/pages/examples.html">Examples</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <div id="masthead">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6">
+            <h1><span style="color:#50D8D7;font-weight:bold;font-size:5rem;">Silk</span></h1>
+            <p>Build interactive websites and games</p>
+            <button type="button" class="btn btn-outline-info btn-lg">Getting Started</button>
+            <button type="button" class="btn btn-outline-warning btn-lg">Download</button>
+          </div>
+          <div class="col-md-6">
+            <h1>Work in Progress!</h1>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="info">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-4">
+            <div class="card">
+              <div class="card-body">
+                <h4 class="card-title">Demo</h4>
+                <p class="card-text"><code>//cool code</code></p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card">
+              <div class="card-body">
+                <h4 class="card-title">Demo</h4>
+                <p class="card-text"><code>//cool code</code></p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card">
+              <div class="card-body">
+                <h4 class="card-title">Demo</h4>
+                <p class="card-text"><code>//cool code</code></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer id="footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <p>Silk@2017 designed and built by <a href="https://github.com/Squishy123">@squishy123</a>.<br> Currently version 1.0-alpha. Open Source code under GPL-3.0 license.</p>
+        </div>
+        <div class="col-md-6 text-center">
+          <a href="https://github.com/Squishy123/silk"><img src="/silk/res/GitHub-Mark-32px.png"></img></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+</body>
+
+</html>

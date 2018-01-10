@@ -17,8 +17,8 @@ c.start(60, 60);
 
 let tiles = [new Tile(), new Tile(), new Tile()];
 tiles.forEach(function(t) {
-  c.addObject(t);
+  c.addActor(t);
 });
 
 let p1 = new Player();
-c.addObject(p1);
+c.addActor(p1);

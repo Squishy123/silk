@@ -1,25 +1,23 @@
 class Player extends Actor {
   constructor() {
-    super();
+    super(document.createElement('div'));
   }
-
-  init() {
-    super.init();
+  
+  preload() {
     this.vx = 5;
     this.vy = 5;
-    this.x = 200
-    this.y = 200;
 
     this.styleElement({
-      "background-color": 'red',
+      "position": 'absolute',
+      "background-color": 'orange',
     });
 
 
     this.setBounds({
       height: 50,
       width: 50,
-      x: this.x,
-      y: this.y
+      x: 200,
+      y: 200
     });
 
 
@@ -32,12 +30,12 @@ class Player extends Actor {
   }
 
   render() {
-    if (this.stage.checkCollisions(this).length > 0) this.styleElement({
+    /**if (this.stage.checkCollisions(this).length > 0) this.styleElement({
       "background-color": 'green'
     });
     else this.styleElement({
       "background-color": "red"
-    });
+    });**/
   }
 
 
@@ -46,7 +44,6 @@ class Player extends Actor {
     if (this.inputHandler.keys[83]) this.y += this.vy;
     if (this.inputHandler.keys[65]) this.x -= this.vx;
     if (this.inputHandler.keys[68]) this.x += this.vx;
-
     this.setBounds({
       x: this.x,
       y: this.y

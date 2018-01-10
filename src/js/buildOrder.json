@@ -1,0 +1,4 @@
+{
+  "Library-Order": ["Timer.js", "InputHandler.js", "SilkObject.js", "Actor.js", "Stage.js"],
+  "SRC-Order": ["player.js", "tile.js", "main.js"]
+}

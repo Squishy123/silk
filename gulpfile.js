@@ -5,25 +5,47 @@ const gulp = require('gulp');
 const [jshint, concat, rename, uglify, util, connect, babel] = [require('gulp-jshint'), require('gulp-concat'), require('gulp-rename'), require('gulp-uglify'), require('gulp-util'), require('gulp-connect'), require('gulp-babel')];
 
 // Include node plugins
-const [del, chalk] = [require('del'), require('chalk')];
+const [del, chalk, map] = [require('del'), require('chalk'), require('map-stream')];
 
+// Directory Paths
 const [SRC_PATH, APP_PATH, BUILD_PATH] = ['src', 'app', 'build'];
-gulp.task('default', function() {
-  util.log(chalk.bgCyan(chalk.black("== Welcome to Silk-Generator ==")))
+const myReporter = map(function(file, cb) {
+  if(file.jshint.success) return cb(null, file);
+
+  console.log(`Error found in: ${file.path}`);
+  file.jshint.results.forEach(function(result) {
+    if(!result.error) return;
+    //print Error
+    console.log(`line ${result.error.line}, col ${result.error.character}, code ${result.error.code}, ${result.error.reason}`);
+  });
+  cb(null, file);
 });
 
-gulp.task('start', ['build', 'connect', 'watchSRC', 'watchLIB'])
+gulp.task('default', function() {
+  util.log(chalk.bgCyan(chalk.black("== Welcome to Silk-Reactor ==")))
+  util.log(chalk.bgCyan(chalk.black("Run npm start or gulp start: to start building")))
+  util.log(chalk.bgCyan(chalk.black("Run gulp remove:dist to delete the app directory")))
+});
+
+gulp.task('start', ['build:dist', 'connect:server', 'watch:(source:html)', 'watch:library', 'watch:app'])
+
+gulp.task('build:dist', ['update:html', 'build:library', 'build:app'])
 
 //start the server
-gulp.task('connect', function() {
+gulp.task('connect:server', function() {
   connect.server({
     root: 'app',
     livereload: true
   });
 });
 
+//watch for changes in index.html
+gulp.task('watch:(source:html)', function() {
+  gulp.watch([`${SRC_PATH}/*.html`], ['update:html'])
+});
+
 //update html
-gulp.task('updateHTML', function() {
+gulp.task('update:html', function() {
   util.log(chalk.bgCyan(chalk.black("== Updating Webpage ==")))
   gulp.src(`${SRC_PATH}/*.html`)
     .pipe(gulp.dest(`${APP_PATH}/`, {
@@ -35,62 +57,78 @@ gulp.task('updateHTML', function() {
   util.log(chalk.bgCyan(chalk.black("== Finished Update ==")))
 });
 
-//watch for changes
-gulp.task('watchSRC', function() {
-  gulp.watch([`${SRC_PATH}/*.html`], ['updateHTML'])
+//watch changes for js app files
+gulp.task('watch:app', function() {
+  gulp.watch([`${SRC_PATH}/js/*.js`], ['build:app'])
 });
 
-//updates library files
-gulp.task('updateLIB', function() {
-  util.log(chalk.bgCyan(chalk.black("== Updating Library ==")))
-  gulp.src(`${SRC_PATH}/js/lib/*.js`)
+gulp.task('build:app', function() {
+  //Build SRC
+  let SRCOrder = require(`./${SRC_PATH}/js/buildOrder.json`)["SRC-Order"];
+  for (let i = 0; i < SRCOrder.length; i++) {
+    SRCOrder[i] = `${SRC_PATH}/js/${SRCOrder[i]}`;
+  }
+
+  console.log(SRCOrder);
+
+  gulp.src(SRCOrder, {
+      base: './'
+    })
+    .pipe(concat('app.min.js'))
     .pipe(jshint({
       esversion: 6
     }))
-    .pipe(jshint.reporter('default'));
-  gulp.src(`${SRC_PATH}/js/lib/*.js`)
-    .pipe(concat('silk-lib.js'))
-    .pipe(gulp.dest(`${APP_PATH}/src/js/lib`))
-  util.log(chalk.bgCyan(chalk.black("== Finished Update ==")))
-});
+    .pipe(myReporter)
+    .pipe(babel())
+    .pipe(gulp.dest(`./${APP_PATH}/js/`));
 
-//watch for changes
-gulp.task('watchLIB', function() {
-  gulp.watch([`${SRC_PATH}/js/lib/*.js`], ['updateLIB'])
-});
-
-//copy over src dir
-gulp.task('copy', function() {
-  //copy dir
-  gulp.src(`${SRC_PATH}/**/*`)
-    .pipe(gulp.dest(`${APP_PATH}/`));
+  gulp.src(`${APP_PATH}/app.min.js`)
+    .pipe(connect.reload());
 });
 
 //delete libjs
-gulp.task('rmlib', function() {
-  del(`${APP_PATH}/js/lib/`, {
+gulp.task('clean:app', function() {
+  del(`${APP_PATH}/js/app.min.js`, {
     force: true
   });
 });
 
-gulp.task('build', ['copy', 'rmlib'], function() {
-  util.log(chalk.bgCyan(chalk.black("== Starting Build ==")))
-  let buildOrder = require(`./${SRC_PATH}/js/lib/buildOrder.json`)["order"];
-  for (let i = 0; i < buildOrder.length; i++) {
-    buildOrder[i] = `${SRC_PATH}/js/lib/${buildOrder[i]}`;
-  }
-
-  console.log(buildOrder);
-
-  //Add library
-  return gulp.src(buildOrder)
-    .pipe(concat('silk.min.js'))
-    .pipe(babel())
-    .pipe(gulp.dest(`${APP_PATH}/js`));
+//watch for changes
+gulp.task('watch:library', function() {
+  gulp.watch([`${SRC_PATH}/js/lib/*.js`], ['clean:library', 'build:library'])
 });
 
+gulp.task('build:library', function() {
+  util.log(chalk.bgCyan(chalk.black("== Starting Build ==")))
+  let libraryBuildOrder = require(`./${SRC_PATH}/js/buildOrder.json`)["Library-Order"];
+  for (let i = 0; i < libraryBuildOrder.length; i++) {
+    libraryBuildOrder[i] = `${SRC_PATH}/js/lib/${libraryBuildOrder[i]}`;
+  }
 
-gulp.task('cleanup', function() {
+  console.log(libraryBuildOrder);
+
+  //Add library
+  gulp.src(libraryBuildOrder)
+    .pipe(concat('silk.min.js'))
+    .pipe(jshint({
+      esversion: 6
+    }))
+    .pipe(myReporter)
+    .pipe(babel())
+    .pipe(gulp.dest(`${APP_PATH}/js`));
+
+  gulp.src(`${APP_PATH}/silk.min.js`)
+    .pipe(connect.reload());
+});
+
+//delete libjs
+gulp.task('clean:library', function() {
+  del(`${APP_PATH}/js/silk.min.js`, {
+    force: true
+  });
+});
+
+gulp.task('remove:dist', function() {
   util.log(chalk.bgCyan(chalk.black("== Cleaning Up ==")))
   //delete app files
   del(APP_PATH, {
