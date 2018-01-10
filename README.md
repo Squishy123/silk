@@ -1,5 +1,5 @@
-# Webfoot
-A DOM-Game Engine
+# Silk 
+A DOM-manipulation Engine
 https://squishy123.github.io/silk/
 
 # Getting Started
