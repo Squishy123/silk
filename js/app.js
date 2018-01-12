@@ -152,7 +152,7 @@
   }
 
   let main = new Page();
-  main.start(60, 60);
+  main.start(120, 120);
   for (let i = 1; i < 5; i++) {
     main.addActor(new Square(1000 + (i * 100), 1000 - (i * 100)));
   }
