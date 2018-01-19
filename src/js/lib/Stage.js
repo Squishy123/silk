@@ -23,7 +23,7 @@ class Stage extends SilkObject {
   }
 
   /**
-   * Creates a new QuadTree and sets it to the current bounds
+   * Starts render and update cycles
    **/
   start(renderTicks, updateTicks) {
     this.renderTicks = renderTicks;

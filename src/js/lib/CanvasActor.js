@@ -4,11 +4,12 @@
  * @author Christian Wang
  * @version 1.0
  **/
-class CanvasActor extends SilkObject {
+class CanvasActor extends CanvasObject {
   /**
    * Creates a new Actor with a div element
    **/
   constructor() {
+    super();
     //World stuff
     this.stage = null;
 

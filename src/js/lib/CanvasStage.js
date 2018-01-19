@@ -17,7 +17,7 @@ class CanvasStage extends SilkObject {
     //background is a function(ctx)
     this.background = null;
 
-    this.canvascanvasActors = [];
+    this.canvasActors = [];
     this.running = false;
 
     //Timers for ticks
@@ -44,10 +44,11 @@ class CanvasStage extends SilkObject {
       this.renderTimer.mark();
 
       //render background
-      this.background(this.ctx);
+      if (this.background)
+        this.background(this.ctx);
 
       let ctx = this.ctx;
-      this.canvascanvasActors.forEach(function(actor) {
+      this.canvasActors.forEach(function(actor) {
         if (actor.render)
           actor.render();
         if (actor.style)
@@ -60,7 +61,7 @@ class CanvasStage extends SilkObject {
   update() {
     if (this.updateTimer.millisecondsElapsed() > (1000 / this.updateTicks)) {
       this.updateTimer.mark();
-      this.canvascanvasActors.forEach(function(actor) {
+      this.canvasActors.forEach(function(actor) {
         if (actor.update)
           actor.update();
       });
@@ -104,6 +105,4 @@ class CanvasStage extends SilkObject {
     }
     actor.destroy();
   }
-}
-
 }
