@@ -84,11 +84,3 @@ class SilkObject {
     };
   }
 }
-
-/**
- * Custom Errors
- *
- * @author Christian Wang
- * @version 1.0
- **/
-class SilkError extends Error {}

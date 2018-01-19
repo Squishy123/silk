@@ -1,17 +1,23 @@
 /**
- * An DOM object that houses actors and manages
+ * A Canvas reference that houses canvascanvasActors and manages
  * their runtime states
  *
  * @author Christian Wang
  * @version 1.0
  **/
-class Stage extends SilkObject {
+class CanvasStage extends SilkObject {
   /**
-   * Creates a new Stage with a given element
+   * Creates a new CanvasStage with a passed canvas reference
    **/
-  constructor(element) {
-    super(element);
-    this.actors = [];
+  constructor(canvas) {
+    super(canvas);
+    //grab context
+    this.ctx = canvas.getContext('2d');
+
+    //background is a function(ctx)
+    this.background = null;
+
+    this.canvascanvasActors = [];
     this.running = false;
 
     //Timers for ticks
@@ -23,7 +29,7 @@ class Stage extends SilkObject {
   }
 
   /**
-   * Creates a new QuadTree and sets it to the current bounds
+   * Starts render and update cycles
    **/
   start(renderTicks, updateTicks) {
     this.renderTicks = renderTicks;
@@ -36,9 +42,16 @@ class Stage extends SilkObject {
   render() {
     if (this.renderTimer.millisecondsElapsed() > (1000 / this.renderTicks)) {
       this.renderTimer.mark();
-      this.actors.forEach(function(actor) {
+
+      //render background
+      this.background(this.ctx);
+
+      let ctx = this.ctx;
+      this.canvascanvasActors.forEach(function(actor) {
         if (actor.render)
           actor.render();
+        if (actor.style)
+          actor.style(ctx);
       });
     }
     window.requestAnimationFrame(this.render.bind(this));
@@ -47,7 +60,7 @@ class Stage extends SilkObject {
   update() {
     if (this.updateTimer.millisecondsElapsed() > (1000 / this.updateTicks)) {
       this.updateTimer.mark();
-      this.actors.forEach(function(actor) {
+      this.canvascanvasActors.forEach(function(actor) {
         if (actor.update)
           actor.update();
       });
@@ -57,12 +70,12 @@ class Stage extends SilkObject {
   }
 
   /**
-   * Stops the actors in this stage from looping
+   * Stops the canvasActors in this stage from looping
    **/
   stop() {
     this.running = false;
     /**
-    this.actors.forEach(function(e) {
+    this.canvasActors.forEach(function(e) {
       e.actor.stop();
     });**/
     window.cancelAnimationFrame(this.render);
@@ -74,8 +87,7 @@ class Stage extends SilkObject {
    **/
   addActor(actor, bounds) {
     actor.stage = this;
-    this.actors.push(actor);
-    this.element.appendChild(actor.element);
+    this.canvasActors.push(actor);
     if (bounds != null)
       actor.setBounds(bounds);
   }
@@ -86,11 +98,12 @@ class Stage extends SilkObject {
   removeActor(actor) {
     actor.stage = null;
     actor.stop();
-    for (let i = 0; i < this.actors.length; i++) {
-      if (Object.is(actor, this.actors[i]))
-        this.actors.splice(i, 1);
+    for (let i = 0; i < this.canvasActors.length; i++) {
+      if (Object.is(actor, this.canvasActors[i]))
+        this.canvasActors.splice(i, 1);
     }
     actor.destroy();
-    this.element.removeChild(actor.element);
   }
+}
+
 }
