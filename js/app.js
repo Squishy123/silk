@@ -44,7 +44,14 @@
       this.element.appendChild(logo);
 
       let info = document.createElement('div');
-      info.innerHTML = "<h2 class='bold'>Silk.js</h2><p class='display'><a href='https://github.com/Squishy123/silk'>Silk</a> is a front-end utility library built in javascript.</p> <a class='btn display' href='js/silk.min.js' download>Download Alpha 1.0.0</a>";
+
+      //import splash
+      let splash = document.querySelector("#splash");
+      let template = splash.import.querySelector('template');
+      let clone = document.importNode(template.content, true);
+
+      //add splash to info
+      info.appendChild(clone);
       this.element.appendChild(info);
 
       this.styleElement({
