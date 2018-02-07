@@ -46,12 +46,10 @@
       let info = document.createElement('div');
 
       //import splash
-      let splash = document.querySelector("#splash");
-      let template = splash.import.querySelector('template');
-      let clone = document.importNode(template.content, true);
+
 
       //add splash to info
-      info.appendChild(clone);
+      info.appendChild(importTemplate("pages/splash.html"));
       this.element.appendChild(info);
 
       this.styleElement({
