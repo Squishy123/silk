@@ -12,7 +12,8 @@ function importTemplate(url) {
   //grab link
   //let link = document.querySelector(`link[href='${url}']`);
   if (el) {
-    let temp = el.import.querySelector('template');
+    //import template tag or template ID
+    let temp = el.import.querySelector('template') || el.import.querySelector('#template');
     exp = document.importNode(temp.content, true);
 
     //style
