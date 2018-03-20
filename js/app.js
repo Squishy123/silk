@@ -45,7 +45,7 @@ class Info extends Actor {
 
     let info = document.createElement('div');
 
-    info.innerHTML = "<h2 class='bold'>Silk.js</h2><p class='display' ><a href='https://github.com/Squishy123/silk'>Silk</a> is a front-end utility library built in javascript.</p ><a class='btn display' href='js/silk.min.js' download>Download Alpha 1.0.0</a><a class='btn display' href='js/silk.min.js' download>Docs</a>";
+    info.innerHTML = "<h2 class='bold'>Silk.js</h2><p class='display' ><a href='https://github.com/Squishy123/silk'>Silk</a> is a front-end utility library built in javascript.</p ><a class='btn display' href='js/silk.min.js' download>Download Alpha 1.0.0</a><a class='btn display' href='pages/documentation.html'>Docs</a>";
 
     this.element.appendChild(info);
 
