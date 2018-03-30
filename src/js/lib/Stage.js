@@ -36,7 +36,7 @@ class Stage extends SilkObject {
   render() {
     if (this.renderTimer.millisecondsElapsed() > (1000 / this.renderTicks)) {
       this.renderTimer.mark();
-      this.actors.forEach(function(actor) {
+      this.actors.forEach(function (actor) {
         if (actor.render)
           actor.render();
       });
@@ -47,7 +47,7 @@ class Stage extends SilkObject {
   update() {
     if (this.updateTimer.millisecondsElapsed() > (1000 / this.updateTicks)) {
       this.updateTimer.mark();
-      this.actors.forEach(function(actor) {
+      this.actors.forEach(function (actor) {
         if (actor.update)
           actor.update();
       });
@@ -78,6 +78,7 @@ class Stage extends SilkObject {
     this.element.appendChild(actor.element);
     if (bounds != null)
       actor.setBounds(bounds);
+    actor.init();
   }
 
   /**
