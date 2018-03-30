@@ -35,7 +35,7 @@ class Info extends Actor {
     });
   }
 
-  preload() {
+  create() {
     let logo = document.createElement('img');
     logo.draggable = false;
     logo.src = "res/silk-logo.png";
@@ -80,7 +80,7 @@ class Square extends Actor {
     this.offsetY = offsetY;
   }
 
-  preload() {
+  create() {
     this.styleElement({
       "position": 'absolute',
       "background-color": '#67D9D8',
@@ -134,16 +134,16 @@ class Page extends Stage {
   }
 
   start(renderTicks, updateTicks) {
-    this.preload();
+    this.create();
     super.start(renderTicks, updateTicks);
   }
 
   update() {
     super.update();
-    document.getElementById('fps').innerHTML = `FPS: ${this.fps}`;
+    //document.getElementById('fps').innerHTML = `FPS: ${this.fps}`;
   }
 
-  preload() {
+  create() {
     let logo = new Info();
     [this.windowWidth, this.windowHeight] = [window.innerWidth, window.innerHeight];
     this.addActor(logo, {
